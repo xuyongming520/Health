@@ -19,9 +19,24 @@ const router = new Router({
           path: '/homepage',
           name: 'homepage',
           meta: {
-            title: '图书管理系统',
+            title: 'Health',
           },
           component: () => import('@/views/homepage/index.vue'),
+        },
+      ],
+    },
+    {
+      path: '',
+      component: Layout,
+      redirect: '/mall',
+      children: [
+        {
+          path: '/mall',
+          name: 'mall',
+          meta: {
+            title: '健康商城',
+          },
+          component: () => import('@/views/mall/index.vue'),
         },
       ],
     },

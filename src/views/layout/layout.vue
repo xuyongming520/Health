@@ -8,8 +8,8 @@
 
     <footer>
       <main>
-        <div class="logo"><svg-icon icon-class="book" class-name="icon" /></div>
-        <span>&copy; 图书管理系统</span>
+        <div class="logo"><svg-icon icon-class="health" class-name="icon" /></div>
+        <span>基于用户基础健康数据的健康商品交易平台</span>
       </main>
     </footer>
   </div>

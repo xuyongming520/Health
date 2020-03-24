@@ -19,12 +19,16 @@
     <div class="navigation">
       <main>
         <section class="navigationStatus">
-          <svg-icon icon-class="book" class-name="icon" @click="handleToHomepage()" />
-          <div class="logo" @click="handleToHomepage()">Library</div>
+          <svg-icon icon-class="health" class-name="icon" @click="handleToHomepage()" />
+          <div class="logo" @click="handleToHomepage()">Health</div>
           <nav>
-            <a @click="search">书目检索</a>
+            <a @click="files">健康档案</a>
+            <a @click="mall">健康商城</a>
+            <a @click="forum">论坛</a>
+            <a @click="mine">我的</a>
+            <!-- <a @click="search">书目检索</a>
             <a @click="classify">分类浏览</a>
-            <a @click="library">我的图书馆</a>
+            <a @click="library">我的图书馆</a> -->
           </nav>
         </section>
       </main>
@@ -60,15 +64,18 @@ export default {
     handleToUserInfo() {
       this.$router.push({ name: 'user' });
     },
-    search() {
-      this.$router.push({ name: 'search' });
+    mall() {
+      this.$router.push({ name: 'mall' });
     },
-    classify() {
-      this.$router.push({ name: 'classify' });
-    },
-    library() {
-      this.$router.push({ name: 'library' });
-    },
+    // search() {
+    //   this.$router.push({ name: 'search' });
+    // },
+    // classify() {
+    //   this.$router.push({ name: 'classify' });
+    // },
+    // library() {
+    //   this.$router.push({ name: 'library' });
+    // },
   },
 };
 
@@ -114,6 +121,7 @@ export default {
     color:$navigation;
     font-weight: 600;
     box-shadow: 0 3px 0 #d2d2d2;
+    font-family: "Poiret One", cursive;
     main{
       width: $detailWidth;
       margin: 0 auto;

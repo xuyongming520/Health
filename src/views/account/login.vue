@@ -4,7 +4,7 @@
       <el-card class="login">
         <header>
           <svg-icon icon-class="book" class-name="icon" class="loginIcon"/>
-          <div class="logo" >Library</div>
+          <div class="logo" >Health</div>
         </header>
         <section>
           <el-form
@@ -21,8 +21,8 @@
               <el-input type="password" v-model="loginForm.password"></el-input>
             </el-form-item>
             <el-form-item >
-              <el-button type="primary" @click="submit" style="margin-top:15px">登陆</el-button>
-              <el-button @click="register" style="float:right;margin:15px 70px">注册</el-button>
+              <el-button type="primary" @click="submit" style="margin-top:15px;width:260px">
+                登陆</el-button>
             </el-form-item>
           </el-form>
         </section>
