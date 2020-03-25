@@ -14,8 +14,8 @@
             ref="registerForm"
             label-width="100px"
             class="demo-ruleForm">
-            <el-form-item label="账号" prop="uniqueId" style="width:400px">
-              <el-input v-model="registerForm.uniqueId" placeholder="请输入账号"></el-input>
+            <el-form-item label="电话号码" prop="phone" style="width:400px">
+              <el-input v-model="registerForm.phone" placeholder="请输入账号"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password" style="width:400px">
               <el-input
@@ -68,15 +68,17 @@ export default {
 
     return {
       registerForm: {
-        uniqueId: '',
+        phone: '',
         password: '',
         checkPass: '',
         name: '',
-        classId: '',
+        email: '',
       },
       rules: {
-        uniqueId: [
-          { required: true, message: '请输入账号', trigger: 'blur' },
+        phone: [
+          {
+            pattern: /^[1][3,4,5,7,8,9][0-9]{9}$/, required: true, message: '输入的电话有误', trigger: 'blur',
+          },
         ],
         passw1: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -88,8 +90,14 @@ export default {
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
         ],
-        classId: [
-          { required: true, message: '请选择类别 ', trigger: 'blur' },
+        email: [
+          {
+            // eslint-disable-next-line no-useless-escape
+            pattern: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+            required: true,
+            message: '输入的邮箱有误',
+            trigger: 'blur',
+          },
         ],
       },
     };
@@ -100,13 +108,17 @@ export default {
         .then((result) => {
           switch (result.data.code) {
             case 0:
-              this.$message.error('注册失败');
-              break;
-            case 1:
               this.$message.success('注册成功');
               this.$router.push({ name: 'login' });
               break;
+            case 1:
+              this.$message.warning('该账号已注册');
+              break;
+            case 2:
+              this.$message.error('注册失败');
+              break;
             default:
+              this.$message.error('注册失败');
               break;
           }
         });

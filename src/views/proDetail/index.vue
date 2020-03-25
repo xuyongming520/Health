@@ -61,8 +61,8 @@
 </template>
 
 <script>
-import * as book from '@/api/bookInfo';
-import * as classes from '@/api/bookClass';
+import * as book from '@/api/product';
+import * as classes from '@/api/proClass';
 import * as lend from '@/api/borrow';
 import * as books from '@/api/books';
 import { mapGetters } from 'vuex';

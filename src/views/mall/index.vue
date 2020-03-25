@@ -19,9 +19,9 @@
           </div>
           <div class="classList">
             <el-tag class="tag"
-              v-for="(item,key) of bookClassList"
+              v-for="(item,key) of proClassList"
               :key="key"
-              @click="handleClass(item.pkId)">
+              @click="handleClass(item.id)">
               {{item.name}}
             </el-tag>
           </div>
@@ -32,12 +32,12 @@
           </div>
           <div class="bookList">
             <div class="bookBox"
-                v-for="(item,key) of bookList"
+                v-for="(item,key) of productList"
                 :key="key"
-                @click="handletoDetail(item.pkId)">
-                <img :src="item.image">
+                @click="handletoDetail(item.id)">
+                <img :src="item.pic">
                 <h6>{{item.name}}</h6>
-                <span>{{item.author}}</span>
+                <span>{{item.price}}</span>
             </div>
           </div>
           <div class="page">
@@ -59,29 +59,27 @@
 </template>
 
 <script>
-import * as bookClass from '@/api/bookClass';
-import * as bookInfo from '@/api/bookInfo';
+import * as proClass from '@/api/proClass';
+import * as product from '@/api/product';
 
 export default {
   name: 'mall',
   data() {
     return {
-      bookClassList: [],
-      bookList: [],
+      proClassList: [],
+      productList: [],
       total: 0,
       listQuery: {
         limit: 8,
         page: 1,
         name: null,
-        author: null,
-        publishers: null,
         classId: null,
       },
     };
   },
   methods: {
     getClassList() {
-      bookClass.queryList()
+      proClass.queryList()
         .then((result) => {
           switch (result.data.code) {
             case 0:
@@ -96,7 +94,7 @@ export default {
         });
     },
     getBookList() {
-      bookInfo.queryList(this.listQuery)
+      product.queryList(this.listQuery)
         .then((result) => {
           switch (result.data.code) {
             case 0:
@@ -121,7 +119,7 @@ export default {
     },
     handleClass(id) {
       this.listQuery.classId = id;
-      bookInfo.queryList(this.listQuery)
+      product.queryList(this.listQuery)
         .then((result) => {
           console.log(result);
           switch (result.data.code) {

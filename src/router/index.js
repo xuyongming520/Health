@@ -41,77 +41,17 @@ const router = new Router({
       ],
     },
     {
-      path: '/search',
+      path: '/proDetail',
       component: Layout,
-      redirect: '/search/index.vue',
+      redirect: '/proDetail/index.vue',
       children: [
         {
-          path: '/search/index',
-          name: 'search',
+          path: '/proDetail/index/:id',
+          name: 'proDetail',
           meta: {
-            title: '书目搜索',
+            title: '商品详情',
           },
-          component: () => import('@/views/search/index.vue'),
-        },
-      ],
-    },
-    {
-      path: '/classify',
-      component: Layout,
-      redirect: '/classify/index.vue',
-      children: [
-        {
-          path: '/classify/index',
-          name: 'classify',
-          meta: {
-            title: '分类浏览',
-          },
-          component: () => import('@/views/classify/index.vue'),
-        },
-      ],
-    },
-    {
-      path: '/library',
-      component: Layout,
-      redirect: '/library/index.vue',
-      children: [
-        {
-          path: '/library/index',
-          name: 'library',
-          meta: {
-            title: '我的图书馆',
-          },
-          component: () => import('@/views/library/index.vue'),
-        },
-      ],
-    },
-    {
-      path: '/bookDetail',
-      component: Layout,
-      redirect: '/bookDetail/index.vue',
-      children: [
-        {
-          path: '/bookDetail/index/:id',
-          name: 'bookDetail',
-          meta: {
-            title: '图书详情',
-          },
-          component: () => import('@/views/bookDetail/index.vue'),
-        },
-      ],
-    },
-    {
-      path: '/user',
-      component: Layout,
-      redirect: '/user/index.vue',
-      children: [
-        {
-          path: '/user/index',
-          name: 'user',
-          meta: {
-            title: '用户信息',
-          },
-          component: () => import('@/views/user/index.vue'),
+          component: () => import('@/views/proDetail/index.vue'),
         },
       ],
     },

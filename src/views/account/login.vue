@@ -14,8 +14,8 @@
             ref="loginForm"
             label-width="100px"
             class="demo-ruleForm">
-            <el-form-item label="账号" prop="uniqueId" placeholder="请输入账号" style="width:400px">
-              <el-input v-model="loginForm.uniqueId"></el-input>
+            <el-form-item label="账号" prop="phone" placeholder="请输入账号" style="width:400px">
+              <el-input v-model="loginForm.phone"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password" placeholder="请输入密码" style="width:400px">
               <el-input type="password" v-model="loginForm.password"></el-input>
@@ -39,11 +39,11 @@ export default {
   data() {
     return {
       loginForm: {
-        uniqueId: '',
+        phone: '',
         password: '',
       },
       rules: {
-        uniqueId: [
+        phone: [
           { required: true, message: '请输入账号', trigger: 'blur' },
         ],
         passw1: [

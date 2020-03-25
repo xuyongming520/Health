@@ -2,27 +2,26 @@
 import request from '@/utils/request';
 
 export function register({
-  uniqueId, password, name, classId,
+  phone, password, name, email,
 }) {
-  console.log(classId);
   return request({
-    url: '/users/register',
+    url: '/user/register',
     method: 'post',
     data: {
-      uniqueId,
+      phone,
       password,
       name,
-      classId,
+      email,
     },
   });
 }
 
-export function login(uniqueId, password) {
+export function login(phone, password) {
   return request({
-    url: '/users/login',
+    url: '/user/login',
     method: 'post',
     data: {
-      uniqueId,
+      phone,
       password,
     },
   });
