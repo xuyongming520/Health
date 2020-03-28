@@ -5,6 +5,7 @@ import router from 'vue-router';
 import store from '@/store';
 import { getToken, removeToken } from '@/utils/auth';
 
+
 // 创建一个 axios 实例
 const service = axios.create({
   baseURL: 'http://localhost:8080', // TODO:修改成真实的后台地址

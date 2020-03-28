@@ -12,12 +12,7 @@ export function query(id) {
 
 export function queryList() {
   return request({
-    url: '/books/class/list',
+    url: '/proClass/selectClassList',
     method: 'post',
-    data: {
-      page: 1,
-      limit: 100,
-      name: null,
-    },
   });
 }

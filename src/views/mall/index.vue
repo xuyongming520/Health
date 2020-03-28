@@ -32,12 +32,13 @@
           </div>
           <div class="bookList">
             <div class="bookBox"
-                v-for="(item,key) of productList"
+                v-for="(item,key) of proList"
                 :key="key"
                 @click="handletoDetail(item.id)">
-                <img :src="item.pic">
+                <img :src="`http://localhost:8080/product/images/`+item.pic">
+                <span>￥{{item.price}}</span>
                 <h6>{{item.name}}</h6>
-                <span>{{item.price}}</span>
+
             </div>
           </div>
           <div class="page">
@@ -67,42 +68,47 @@ export default {
   data() {
     return {
       proClassList: [],
-      productList: [],
+      proList: [],
       total: 0,
       listQuery: {
-        limit: 8,
+        limit: 9,
         page: 1,
         name: null,
         classId: null,
       },
+      input: null,
     };
   },
   methods: {
+    handletoSearch() {
+      this.listQuery.name = this.input;
+      this.getProList();
+    },
     getClassList() {
       proClass.queryList()
         .then((result) => {
           switch (result.data.code) {
             case 0:
-              this.$message.error('载入失败');
+              this.proClassList = result.data.data;
               break;
             case 1:
-              this.bookClassList = result.data.data.list;
+              this.$message.error('载入失败');
               break;
             default:
               break;
           }
         });
     },
-    getBookList() {
+    getProList() {
       product.queryList(this.listQuery)
         .then((result) => {
           switch (result.data.code) {
             case 0:
-              this.$message.error('载入失败');
+              this.proList = result.data.data.records;
+              this.total = result.data.data.total;
               break;
             case 1:
-              this.bookList = result.data.data.list;
-              this.total = result.data.data.totalCount;
+              this.$message.error('载入失败');
               break;
             default:
               break;
@@ -111,26 +117,25 @@ export default {
     },
     handleSizeChange(val) {
       this.listQuery.limit = val;
-      this.getBookList();
+      this.getProList();
     },
     handleCurrentChange(val) {
       this.listQuery.page = val;
-      this.getBookList();
+      this.getProList();
     },
     handleClass(id) {
       this.listQuery.classId = id;
       product.queryList(this.listQuery)
         .then((result) => {
-          console.log(result);
           switch (result.data.code) {
             case 0:
-              this.$message.warning('未查询到该类型的书籍');
-              this.bookList = [];
-              this.total = 0;
+              this.proList = result.data.data.records;
+              this.total = result.data.data.total;
               break;
             case 1:
-              this.bookList = result.data.data.list;
-              this.total = result.data.data.totalCount;
+              this.$message.warning('未查询到该类型的书籍');
+              this.proList = [];
+              this.total = 0;
               break;
             default:
               break;
@@ -138,12 +143,12 @@ export default {
         });
     },
     handletoDetail(id) {
-      this.$router.push({ name: 'bookDetail', params: { id } });
+      this.$router.push({ name: 'proDetail', params: { id } });
     },
   },
   created() {
     this.getClassList();
-    this.getBookList();
+    this.getProList();
   },
 };
 </script>
@@ -183,11 +188,19 @@ export default {
           justify-content: flex-start;
           align-items:flex-start;
           flex-wrap: wrap;
-          .tag{
+          .tag:nth-child(odd)
+          {
             flex:0 1;
             text-align: center;
             margin-right:20px;
             margin-top:10px;
+            min-width: 150px;
+          }
+          .tag:nth-child(even){
+            flex:0 1;
+            text-align: center;
+            margin-top:10px;
+            min-width: 150px;
           }
         }
       }
@@ -200,29 +213,26 @@ export default {
           align-items:flex-start;
           flex-wrap: wrap;
           .bookBox{
-            width: 130px;
-            margin:10px 40px;
-            text-align: center;
+            width: 200px;
+            height: 270px;
+            margin:10px 30px;
             color:rgb(59, 89, 152);
             img{
-              width: 116px;
-              height:160px;
+              width: 180px;
+              height:180px;
             }
             h6{
-              width:116px;
+
               font-weight: 500;
               font-size: 16px;
               line-height: 1.4;
-              margin:0;
+              margin:0 auto;
               margin-top:10px;
             }
             span{
               display: block;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              color: #767676;
-              font-size: 14px;
+              color: red;
+              font-size: 18px;
             }
           }
         }
