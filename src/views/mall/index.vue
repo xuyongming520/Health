@@ -2,7 +2,7 @@
   <div id="classify">
     <header>
       <main>
-        <div class="search">
+        <div class="asearch">
           <el-input placeholder="关键字搜索"
             v-model="input"
             style="width:450px;">

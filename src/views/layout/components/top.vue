@@ -24,7 +24,7 @@
           <nav>
             <a @click="files">健康档案</a>
             <a @click="mall">健康商城</a>
-            <a @click="forum">论坛</a>
+            <a @click="car">购物车</a>
             <a @click="mine">我的</a>
             <!-- <a @click="search">书目检索</a>
             <a @click="classify">分类浏览</a>
@@ -66,6 +66,12 @@ export default {
     },
     mall() {
       this.$router.push({ name: 'mall' });
+    },
+    car() {
+      this.$router.push({ name: 'car' });
+    },
+    mine() {
+      this.$router.push({ name: 'mine' });
     },
     // search() {
     //   this.$router.push({ name: 'search' });

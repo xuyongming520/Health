@@ -26,7 +26,7 @@ const router = new Router({
       ],
     },
     {
-      path: '',
+      path: '/mall',
       component: Layout,
       redirect: '/mall',
       children: [
@@ -37,6 +37,36 @@ const router = new Router({
             title: '健康商城',
           },
           component: () => import('@/views/mall/index.vue'),
+        },
+      ],
+    },
+    {
+      path: '/car',
+      component: Layout,
+      redirect: '/car',
+      children: [
+        {
+          path: '/car',
+          name: 'car',
+          meta: {
+            title: '购物车',
+          },
+          component: () => import('@/views/car/index.vue'),
+        },
+      ],
+    },
+    {
+      path: '/mine',
+      component: Layout,
+      redirect: '/mine',
+      children: [
+        {
+          path: '/mine',
+          name: 'mine',
+          meta: {
+            title: '我的',
+          },
+          component: () => import('@/views/mine/index.vue'),
         },
       ],
     },
