@@ -26,6 +26,21 @@ const router = new Router({
       ],
     },
     {
+      path: '/diary',
+      component: Layout,
+      redirect: '/diary',
+      children: [
+        {
+          path: '/diary',
+          name: 'diary',
+          meta: {
+            title: '饮食日记',
+          },
+          component: () => import('@/views/diary/index.vue'),
+        },
+      ],
+    },
+    {
       path: '/mall',
       component: Layout,
       redirect: '/mall',

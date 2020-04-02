@@ -50,11 +50,10 @@
             </template>
           </el-calendar>
         </el-tab-pane>
-        <el-tab-pane label="余额充值" name="third">
+        <el-tab-pane label="余额充值" name="third" style="margin-top:50px">
           <el-form :model="numberValidateForm"
             ref="numberValidateForm"
-            label-width="100px"
-            class="demo-ruleForm">
+            label-width="100px">
             <el-form-item label="充值金额" prop="balance">
               <el-input type="balance"
                 v-model.number="numberValidateForm.balance"
@@ -62,7 +61,7 @@
                 style="width:200px"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
+              <el-button type="primary" @click="submitForm('numberValidateForm')">支付</el-button>
               <el-button @click="resetForm('numberValidateForm')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -86,14 +85,15 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
+      console.log(formName);
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //     this.$message.warring('submit');
+      //   } else {
+      //     console.log('error submit!!');
+      //     return false;
+      //   }
+      // });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

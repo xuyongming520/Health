@@ -22,13 +22,10 @@
           <svg-icon icon-class="health" class-name="icon" @click="handleToHomepage()" />
           <div class="logo" @click="handleToHomepage()">Health</div>
           <nav>
-            <a @click="files">健康档案</a>
+            <a @click="diary">饮食日记</a>
             <a @click="mall">健康商城</a>
             <a @click="car">购物车</a>
             <a @click="mine">我的</a>
-            <!-- <a @click="search">书目检索</a>
-            <a @click="classify">分类浏览</a>
-            <a @click="library">我的图书馆</a> -->
           </nav>
         </section>
       </main>
@@ -72,6 +69,9 @@ export default {
     },
     mine() {
       this.$router.push({ name: 'mine' });
+    },
+    diary() {
+      this.$router.push({ name: 'diary' });
     },
     // search() {
     //   this.$router.push({ name: 'search' });

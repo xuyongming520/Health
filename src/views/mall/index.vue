@@ -157,7 +157,7 @@ export default {
 #classify{
   height:100%;
   header{
-    height: 15em;
+    height: 10em;
     background: url('../../assets/leigh-cooper-YGETh6y8MDI-unsplash.jpg') no-repeat center left;
     background-size: cover;
     position: relative;
