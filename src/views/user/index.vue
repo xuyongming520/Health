@@ -35,6 +35,7 @@
             </div>
             <div>
               <line-chart />
+              <!-- <div id="main11" style="width: 600px;height: 400px;"></div> -->
             </div>
           </el-card>
         </el-col>
@@ -45,6 +46,7 @@
 
 <script>
 import * as user from '@/api/users';
+import echarts from 'echarts';
 import LineChart from './components/LineChart.vue';
 
 export default {
@@ -54,6 +56,7 @@ export default {
       info: [],
       input: 0,
       dialogVisible: false,
+      charts: '',
     };
   },
   components: {
@@ -94,9 +97,26 @@ export default {
           }
         });
     },
+    drawPie() {
+      this.charts = echarts.init(document.getElementById('main11'));
+      this.charts.setOption({
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: [{
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: 'line',
+        }],
+      });
+    },
   },
   created() {
     this.getInfo();
+    this.drawPie();
   },
 };
 </script>

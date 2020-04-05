@@ -38,7 +38,6 @@
                 <img :src="`http://localhost:8080/product/images/`+item.pic">
                 <span>￥{{item.price}}</span>
                 <h6>{{item.name}}</h6>
-
             </div>
           </div>
           <div class="page">

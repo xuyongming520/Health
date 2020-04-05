@@ -6,7 +6,10 @@
         <h1>0</h1>
       </div>
       <div class="middle">
-        <doughnut-chart />
+          <div :class="className"
+          :style="{height:'160px',width:'200px',margin:'0 auto'}"
+          ref="lineCard" />
+          <p>推荐预算均衡</p>
       </div>
       <div class="right">
         <span>运动</span>
@@ -21,15 +24,43 @@
             type="primary"
             icon="el-icon-plus"
             size="mini"
-            @click="drawer = true">
+            @click="dialogVisible = true">
           </el-button>
-          <el-drawer
-            title="我是标题"
-            :visible.sync="drawer"
-            :with-header="false">
-            <span>我来啦!</span>
-          </el-drawer>
-
+          <el-dialog
+            title="食物列表"
+            :visible.sync="dialogVisible"
+            width="80%"
+            :before-close="handleClose">
+            <el-input placeholder="关键字搜索"
+              v-model="input"
+              style="width:450px;">
+              <el-button slot="append" icon="el-icon-search" @click="handletoSearch"></el-button>
+            </el-input>
+            <el-table
+              :data="tableData"
+              style="width: 100%">
+              <el-table-column
+                prop="name"
+                label="食物名称"
+                >
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="卡路里"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="num"
+                label="数量"
+                width="180">
+                <el-input-number v-model="num" @change="handleChange" :min="1"></el-input-number>
+              </el-table-column>
+            </el-table>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible = false">提交</el-button>
+            </span>
+          </el-dialog>
         </div>
       </div>
       <div class="content">
@@ -55,20 +86,63 @@
 </template>
 
 <script>
-import DoughnutChart from './components/DoughnutChart.vue';
+// import DoughnutChart from './components/DoughnutChart.vue';
+import echarts from 'echarts';
 
 export default {
   name: 'diary',
   data() {
     return {
-      drawer: false,
+      dialogVisible: false,
+      num: 1,
+      charts: '',
     };
   },
   components: {
-    DoughnutChart,
+    // DoughnutChart,
   },
   methods: {
-
+    initChart() {
+      this.chart = echarts.init(this.$refs.lineCard);
+      this.chart.setOption({
+        color: ['#F0FFF0', 'green'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          show: false,
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: ['50%', '70%'],
+            hoverAnimation: false,
+            avoidLabelOverlap: false,
+            legend: { selectedMode: false },
+            label: {
+              show: false,
+              position: 'center',
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '30',
+                fontWeight: 'bold',
+              },
+            },
+            labelLine: {
+              show: false,
+            },
+            data: [
+              { value: 90 },
+              { value: 10 },
+            ],
+          },
+        ],
+      });
+    },
+  },
+  mounted() {
+    this.initChart();
   },
   created() {
   },
@@ -81,20 +155,22 @@ export default {
   padding-top:10px;
   margin: 0 auto;
   header{
-    height: 12.5em;
+    height: 14em;
     width: $detailWidth;
     background-color: white;
     margin: 0 auto;
     display: flex;
     margin-bottom:20px;
     justify-content:center;
-     align-items:center;
+    align-items:center;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     .left{
       flex:1 1;
       text-align: center;
     }
     .middle{
       flex:1 2;
+      text-align: center;
     }
     .right{
       flex:1 1;
@@ -108,6 +184,7 @@ export default {
     height:100%;
     margin: 0 auto;
     display: flex;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     .content{
       flex:1 1;
       padding: 40px;

@@ -11,6 +11,21 @@ const router = new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
+      path: '/user',
+      component: Layout,
+      redirect: '/user',
+      children: [
+        {
+          path: '/user',
+          name: 'user',
+          meta: {
+            title: '健康商城',
+          },
+          component: () => import('@/views/user/index.vue'),
+        },
+      ],
+    },
+    {
       path: '',
       component: Layout,
       redirect: '/homepage',
@@ -37,6 +52,21 @@ const router = new Router({
             title: '饮食日记',
           },
           component: () => import('@/views/diary/index.vue'),
+        },
+      ],
+    },
+    {
+      path: '/files',
+      component: Layout,
+      redirect: '/files',
+      children: [
+        {
+          path: '/files',
+          name: 'files',
+          meta: {
+            title: '健康档案',
+          },
+          component: () => import('@/views/files/index.vue'),
         },
       ],
     },

@@ -116,6 +116,7 @@ export default {
     display: flex;
     justify-content: row;
     margin-bottom:20px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     .head{
       height: 100%;
       padding:32px ;
@@ -137,7 +138,8 @@ export default {
     width: $detailWidth;
     background-color: white;
     margin: 0 auto;
-    padding:20px 20px
+    padding:20px 20px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   }
 }
 </style>

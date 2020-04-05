@@ -22,10 +22,11 @@
           <svg-icon icon-class="health" class-name="icon" @click="handleToHomepage()" />
           <div class="logo" @click="handleToHomepage()">Health</div>
           <nav>
+            <a @click="files">健康档案</a>
             <a @click="diary">饮食日记</a>
             <a @click="mall">健康商城</a>
             <a @click="car">购物车</a>
-            <a @click="mine">我的</a>
+            <a @click="mine">我的订单</a>
           </nav>
         </section>
       </main>
@@ -59,7 +60,7 @@ export default {
       this.$router.push({ name: 'register' });
     },
     handleToUserInfo() {
-      this.$router.push({ name: 'user' });
+      this.$router.push({ name: 'mine' });
     },
     mall() {
       this.$router.push({ name: 'mall' });
@@ -73,6 +74,9 @@ export default {
     diary() {
       this.$router.push({ name: 'diary' });
     },
+    files() {
+      this.$router.push({ name: 'files' });
+    },
     // search() {
     //   this.$router.push({ name: 'search' });
     // },
@@ -84,7 +88,6 @@ export default {
     // },
   },
 };
-
 </script>
 
 
@@ -153,7 +156,7 @@ export default {
           cursor: pointer;
         }
         nav{
-          flex:2;
+          flex:3;
           display: flex;
           justify-content: space-between;
           a{
