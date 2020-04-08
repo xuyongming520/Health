@@ -3,13 +3,13 @@
     <div class="loginUser">
       <main>
         <section class="loginStatus">
-          <div class="login" v-if="!isLogin">
+          <div class="login" v-if="!phone">
             <span @click="handleToLogin()">登录</span>
             <span @click="handleToRegister()">注册</span>
           </div>
           <div class="user" v-else>
             <span @click="handleToUserInfo()">
-              {{this.uniqueId}}
+              {{this.phone}}
             </span>
             <span @click="handleToLogout()">退出登陆</span>
           </div>
@@ -41,8 +41,7 @@ export default {
   name: 'top',
   computed: {
     ...mapGetters([
-      'isLogin',
-      'uniqueId',
+      'phone',
     ]),
   },
   methods: {
@@ -77,15 +76,6 @@ export default {
     files() {
       this.$router.push({ name: 'files' });
     },
-    // search() {
-    //   this.$router.push({ name: 'search' });
-    // },
-    // classify() {
-    //   this.$router.push({ name: 'classify' });
-    // },
-    // library() {
-    //   this.$router.push({ name: 'library' });
-    // },
   },
 };
 </script>

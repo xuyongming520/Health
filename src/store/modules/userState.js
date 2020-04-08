@@ -4,16 +4,12 @@ import * as users from '@/api/users';
 
 const login = {
   state: {
-    isLogin: !!auth.getToken(),
-    uniqueId: auth.getUniqueId(),
+    phone: auth.getPhone(),
     // balance: auth.getBalance(),
   },
   mutations: {
-    SET_ISLOGIN(state, isLogin) {
-      state.isLogin = isLogin;
-    },
-    SET_UNIQUEID(state, uniqueId) {
-      state.uniqueId = uniqueId;
+    SET_PHONE(state, phone) {
+      state.phone = phone;
     },
     // SET_BALANCE(state, balance) {
     //   state.balance = balance;
@@ -22,17 +18,24 @@ const login = {
   actions: {
     login({ commit }, data) {
       return new Promise((resolve) => {
-        users.login(data.uniqueId, data.password)
+        users.login(data.phone, data.password)
           .then((res) => {
+            console.log(0);
             switch (res.data.code) {
               case 0:
+                console.log(12);
+                console.log(res.data);
+                auth.setPhone(res.data.data);
+                commit('SET_PHONE', true);
                 resolve('0');
-                this.$message.error('账号密码错误');
                 break;
               case 1:
-                auth.setToken(res.data.data);
-                commit('SET_ISLOGIN', true);
                 resolve('1');
+                this.$message.error('该账号还未注册');
+                break;
+              case 2:
+                resolve('2');
+                this.$message.error('账号密码错误');
                 break;
               default:
                 break;
@@ -40,16 +43,14 @@ const login = {
           });
       });
     },
-    getUniqueId({ commit }, data) {
-      auth.setUniqueId(data.uniqueId);
-      commit('SET_UNIQUEID', data.uniqueId);
+    getPhone({ commit }, data) {
+      auth.setPhone(data.phone);
+      commit('SET_PHONE', data.phone);
     },
     logout({ commit }) {
       return new Promise((resolve) => {
-        commit('SET_ISLOGIN', false);
-        commit('SET_UNIQUEID', null);
-        auth.removeToken();
-        auth.removeUniqueId();
+        commit('SET_PHONE', null);
+        auth.removePhone();
         resolve();
       });
     },

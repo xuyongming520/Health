@@ -56,13 +56,13 @@ export default {
     async submit() {
       // console.log(this.loginForm);
       await this.$store.dispatch('login', this.loginForm);
-      if (this.$store.getters.isLogin) {
+      if (this.$store.getters.phone) {
         this.$router.push({ name: 'homepage' });
         this.$message.success('登陆成功');
       } else {
         this.$message.error('账号密码错误');
       }
-      this.$store.dispatch('getUniqueId', this.loginForm);
+      this.$store.dispatch('getPhone', this.loginForm);
     },
     register() {
       this.$router.push({ name: 'register' });

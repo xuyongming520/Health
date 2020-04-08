@@ -3,7 +3,7 @@
 import axios from 'axios';
 import router from 'vue-router';
 import store from '@/store';
-import { getToken, removeToken } from '@/utils/auth';
+import { removePhone } from '@/utils/auth';
 
 
 // 创建一个 axios 实例
@@ -13,17 +13,17 @@ const service = axios.create({
 });
 
 // 封装请求拦截
-service.interceptors.request.use(
-  (config) => {
-    // config.headers['Content-Type'] = 'application/json;charset=UTF-8';
-    if (getToken()) {
-      // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-      config.headers['X-Token'] = getToken();
-    }
-    return config;
-  },
-  error => Promise.reject(error),
-);
+// service.interceptors.request.use(
+//   (config) => {
+//     // config.headers['Content-Type'] = 'application/json;charset=UTF-8';
+//     if (getToken()) {
+//       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+//       config.headers['X-Token'] = getToken();
+//     }
+//     return config;
+//   },
+//   error => Promise.reject(error),
+// );
 
 // 封装响应拦截，判断token是否过期
 service.interceptors.response.use(
@@ -41,9 +41,9 @@ service.interceptors.response.use(
         // 在登录成功后返回当前页面，这一步需要在登录页操作。
         case 401:
           console.error('401:未登录或Token过期');
-          removeToken();
+          removePhone();
           // FIXME:修改 vuex 内的登录状态，请自行修改
-          store.commit('SET_ISLOGIN', false);
+          store.commit('SET_PHONE', false);
           // FIXME:跳转登录页面，并将要浏览的页面fullPath传过去，登录成功后跳转需要访问的页面, 请自行修改
           setTimeout(() => {
             router.replace({
