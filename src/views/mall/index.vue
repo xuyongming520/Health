@@ -194,12 +194,14 @@ export default {
             margin-right:20px;
             margin-top:10px;
             min-width: 150px;
+            cursor: pointer;
           }
           .tag:nth-child(even){
             flex:0 1;
             text-align: center;
             margin-top:10px;
             min-width: 150px;
+            cursor: pointer;
           }
         }
       }

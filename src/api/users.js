@@ -27,10 +27,11 @@ export function login(phone, password) {
   });
 }
 
-export function info() {
+export function userInfo(phone) {
   return request({
-    url: '/users',
+    url: '/user/selectUserByPhone',
     method: 'get',
+    params: { phone },
   });
 }
 

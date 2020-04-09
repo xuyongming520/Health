@@ -135,18 +135,6 @@ export default {
     return {
       detail: [],
       num: 1,
-      // class: ''
-      // stateClasses: [
-      //   {
-      //     value: 0, display_name: '可借阅', type: 'success', state: false,
-      //   },
-      //   {
-      //     value: 1, display_name: '已借出', type: 'danger', state: true,
-      //   },
-      //   {
-      //     value: 2, display_name: '已借出', type: 'danger', state: true,
-      //   },
-      // ],
     };
   },
   methods: {

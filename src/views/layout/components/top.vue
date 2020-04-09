@@ -8,9 +8,7 @@
             <span @click="handleToRegister()">注册</span>
           </div>
           <div class="user" v-else>
-            <span @click="handleToUserInfo()">
               {{this.phone}}
-            </span>
             <span @click="handleToLogout()">退出登陆</span>
           </div>
         </section>
@@ -65,16 +63,36 @@ export default {
       this.$router.push({ name: 'mall' });
     },
     car() {
-      this.$router.push({ name: 'car' });
+      if (this.phone) {
+        this.$router.push({ name: 'car' });
+      } else {
+        this.$message.error('请先登陆');
+        this.$router.push({ name: 'login' });
+      }
     },
     mine() {
-      this.$router.push({ name: 'mine' });
+      if (this.phone) {
+        this.$router.push({ name: 'mine' });
+      } else {
+        this.$message.error('请先登陆');
+        this.$router.push({ name: 'login' });
+      }
     },
     diary() {
-      this.$router.push({ name: 'diary' });
+      if (this.phone) {
+        this.$router.push({ name: 'diary' });
+      } else {
+        this.$message.error('请先登陆');
+        this.$router.push({ name: 'login' });
+      }
     },
     files() {
-      this.$router.push({ name: 'files' });
+      if (this.phone) {
+        this.$router.push({ name: 'files' });
+      } else {
+        this.$message.error('请先登陆');
+        this.$router.push({ name: 'login' });
+      }
     },
   },
 };
@@ -100,7 +118,7 @@ export default {
       display: flex;
       justify-content: flex-end;
       .loginStatus{
-        width: 150px;
+        width: 200px;
         .login,.user{
           display: flex;
           justify-content: space-between;

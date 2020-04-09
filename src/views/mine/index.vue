@@ -5,11 +5,11 @@
         <img src="@/assets/user.png">
       </div>
       <div class="content">
-        <h3 style="font-size:24px">name</h3>
-        <span class="font">手机号码：phone</span>
-        <span class="font">邮箱：email</span>
-        <span class="font">地址：address</span>
-        <span class="font">余额：balance</span>
+        <h3 style="font-size:24px">{{userInfo.name}}</h3>
+        <span class="font">手机号码：{{userInfo.phone}}</span>
+        <span class="font">邮箱：{{userInfo.email}}</span>
+        <span class="font">地址：{{userInfo.address}}</span>
+        <span class="font">余额：{{userInfo.balance}}</span>
       </div>
     </header>
     <main>
@@ -72,18 +72,36 @@
 </template>
 
 <script>
+import * as user from '@/api/users';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'car',
   data() {
     return {
       activeName: 'first',
+      userInfo: [],
       numberValidateForm: {
         age: '',
       },
     };
   },
   methods: {
+    getUserInfo() {
+      user.userInfo(this.phone)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.userInfo = result.data.data;
+              break;
+            case 1:
+              this.$message.error('未查到该用户');
+              break;
+            default:
+              break;
+          }
+        });
+    },
     submitForm(formName) {
       console.log(formName);
       // this.$refs[formName].validate((valid) => {
@@ -100,6 +118,12 @@ export default {
     },
   },
   created() {
+    this.getUserInfo();
+  },
+  computed: {
+    ...mapGetters([
+      'phone',
+    ]),
   },
 };
 </script>
