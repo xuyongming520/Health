@@ -5,28 +5,27 @@ import * as users from '@/api/users';
 const login = {
   state: {
     phone: auth.getPhone(),
+    userId: auth.getUserId(),
     // balance: auth.getBalance(),
   },
   mutations: {
     SET_PHONE(state, phone) {
       state.phone = phone;
     },
-    // SET_BALANCE(state, balance) {
-    //   state.balance = balance;
-    // },
+    SET_USERID(state, userId) {
+      state.userId = userId;
+    },
   },
   actions: {
     login({ commit }, data) {
       return new Promise((resolve) => {
         users.login(data.phone, data.password)
           .then((res) => {
-            console.log(0);
             switch (res.data.code) {
               case 0:
-                console.log(12);
-                console.log(res.data);
-                auth.setPhone(res.data.data);
+                auth.setPhone(res.data.data.phone);
                 commit('SET_PHONE', true);
+                auth.setUserId(res.data.data.id);
                 resolve('0');
                 break;
               case 1:
@@ -47,10 +46,16 @@ const login = {
       auth.setPhone(data.phone);
       commit('SET_PHONE', data.phone);
     },
+    getUserId({ commit }, data) {
+      auth.setUserId(data.id);
+      commit('SET_USERID', data.id);
+    },
     logout({ commit }) {
       return new Promise((resolve) => {
         commit('SET_PHONE', null);
+        commit('SET_USERID', null);
         auth.removePhone();
+        auth.removeUserId();
         resolve();
       });
     },

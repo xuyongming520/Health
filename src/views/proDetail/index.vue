@@ -13,7 +13,6 @@
           <div class="store">库存：{{detail.storage}}</div>
           <el-input-number
           v-model="num"
-          @change="handleChange"
           :min="1"
           label="描述文字">
           </el-input-number>
@@ -21,7 +20,7 @@
                   type="info"
                   size="medium"
                   style="margin-left:20px"
-                  @click="lend(scope.row.pkId,scope.row.infoId)"
+                  @click="buyToCar()"
                   :disabled="detail.storage<=0"
                   >
                   加入购物车
@@ -29,7 +28,7 @@
           <el-button
                   type="danger"
                   size="medium"
-                  @click="lend(scope.row.pkId,scope.row.infoId)"
+                  @click="buy()"
                   :disabled="detail.storage<=0"
                   >
                   购买
@@ -84,42 +83,6 @@
             <div class="grid-content">配料表：{{detail.ingredients}}</div>
           </el-col>
         </el-row>
-
-        <!-- <template>
-          <el-table
-            :data="bookList"
-            style="width: 100%;"
-            :show-header="false">
-            <el-table-column
-              prop="pkId"
-              width="100">
-            </el-table-column>
-            <el-table-column
-              prop="location"
-              width="800">
-            </el-table-column>
-            <el-table-column
-              prop="status">
-              <template slot-scope="scope">
-                <el-tag :type="stateClasses[scope.row.status].type">
-                  {{stateClasses[scope.row.status].display_name}}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column >
-              <template slot-scope="scope">
-                <el-button
-                  type="primary"
-                  size="mini"
-                  @click="lend(scope.row.pkId,scope.row.infoId)"
-                  :disabled="stateClasses[scope.row.status].state"
-                  >
-                  借阅
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </template> -->
       </el-card>
     </main>
   </div>
@@ -127,6 +90,8 @@
 
 <script>
 import * as product from '@/api/product';
+import * as order from '@/api/order';
+import * as car from '@/api/car';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -144,7 +109,6 @@ export default {
           switch (result.data.code) {
             case 0:
               this.detail = result.data.data;
-              // this.getBookClass(result.data.data.classId);
               break;
             case 1:
               this.$message.error('加载失败');
@@ -154,59 +118,56 @@ export default {
           }
         });
     },
-    // getBookClass(id) {
-    //   classes.query(id)
-    //     .then((result) => {
-    //       switch (result.data.code) {
-    //         case 0:
-    //           this.$message.error('加载失败');
-    //           break;
-    //         case 1:
-    //           this.class = result.data.data.name;
-    //           break;
-    //         default:
-    //           break;
-    //       }
-    //     });
-    // },
-    // lend(id, infoId) {
-    //   console.log(infoId);
-    //   if (this.isLogin) {
-    //     lend.borrow(id, infoId)
-    //       .then((result) => {
-    //         switch (result.data.code) {
-    //           case 0:
-    //             this.$message.error('借阅失败');
-    //             break;
-    //           case 1:
-    //             this.$router.push({ name: 'library' });
-    //             break;
-    //           case 2:
-    //             this.$message.info('你已经借过该书');
-    //             break;
-    //           case 3:
-    //             this.$message.warning('余额不足');
-    //             break;
-    //           case 4:
-    //             this.$message.warning('您借阅数量已上限');
-    //             break;
-    //           default:
-    //             break;
-    //         }
-    //       });
-    //   } else {
-    //     this.$message.error('请先登陆');
-    //     this.$router.push({ name: 'login' });
-    //   }
-    // },
+    buy() {
+      const data = new Date();
+      const month = data.getMonth() < 9 ? `0${data.getMonth() + 1}` : data.getMonth() + 1;
+      const date = data.getDate() <= 9 ? `0${data.getDate()}` : data.getDate();
+      const hour = data.getHours();
+      const minutes = data.getMinutes();
+      const seconds = data.getSeconds();
+      this.value = `${month}${date}${hour}${minutes}${seconds}`;
+      const total = this.num * this.detail.price;
+      const status = 0;
+      order.addOrder(this.value, this.detail.id, this.userId, this.num, total, status)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.$router.push({ name: 'mine' });
+              break;
+            case 1:
+              this.$router.push({ name: 'mine' });
+              this.$message.error('余额不足，请前往充值');
+              break;
+            default:
+              this.$message.error('下单失败');
+              break;
+          }
+        });
+    },
+    buyToCar() {
+      const total = this.num * this.detail.price;
+      car.addCar(this.detail.id, this.userId, this.num, total)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.$router.push({ name: 'car' });
+              break;
+            case 1:
+              this.$message.error('下单失败');
+              break;
+            default:
+              break;
+          }
+        });
+    },
   },
   created() {
     this.getProDetail();
   },
   computed: {
     ...mapGetters([
-      'isLogin',
-      'uniqueId',
+      'userId',
+      'phone',
     ]),
   },
 };

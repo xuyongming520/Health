@@ -24,7 +24,7 @@
             <a @click="diary">饮食日记</a>
             <a @click="mall">健康商城</a>
             <a @click="car">购物车</a>
-            <a @click="mine">我的订单</a>
+            <a @click="mine">我的</a>
           </nav>
         </section>
       </main>

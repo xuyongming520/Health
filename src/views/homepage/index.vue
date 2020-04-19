@@ -34,17 +34,19 @@
         <h2>新品推荐</h2>
         <p>We have the latest products, it must be exciting for you</p>
         <el-row :gutter="20" >
-          <el-col :span="6">
+          <el-col :span="6" v-for="(item,key) of proList"
+                :key="key">
             <div class="grid-content bg-purple">
-            <div class="proImg">
-              <a href="#"><img src="@/assets/user.png"></a>
+              <div class="proImg">
+                <a href="#"><img :src="`http://localhost:8080/product/images/`+item.pic"></a>
+              </div>
+              <p>{{item.name}}</p>
+              <h6>￥{{item.price}}</h6>
             </div>
-            <p>12</p>
-            <h6>12</h6>
-          </div></el-col>
+          </el-col>
         </el-row>
         <footer>
-          <el-button type="success" style="margin:0 auto">进入商城</el-button>
+          <el-button type="success" style="margin:0 auto" @click="mall">进入商城</el-button>
         </footer>
       </div>
     </section>
@@ -52,12 +54,44 @@
 </template>
 
 <script>
+import * as product from '@/api/product';
+
 export default {
   name: 'homepage',
   data() {
     return {
-      key: 4,
+      proList: [],
+      listQuery: {
+        limit: 4,
+        page: 1,
+        name: null,
+        classId: null,
+      },
     };
+  },
+  methods: {
+    mall() {
+      this.$router.push({ name: 'mall' });
+    },
+    getProList() {
+      product.queryList(this.listQuery)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.proList = result.data.data.records;
+              console.log(this.proList);
+              break;
+            case 1:
+              this.$message.error('载入失败');
+              break;
+            default:
+              break;
+          }
+        });
+    },
+  },
+  created() {
+    this.getProList();
   },
 };
 </script>
@@ -141,9 +175,10 @@ export default {
           background-color: white;
           width:100%;
           height: 300px;
-          padding: 20px;
+          padding: 30px;
           img{
-
+              width: 100%;
+              height:100%;
           }
         }
         p{

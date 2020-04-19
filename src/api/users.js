@@ -35,52 +35,10 @@ export function userInfo(phone) {
   });
 }
 
-export function recharge(balance) {
+export function recharge(balance, userId) {
   return request({
-    url: '/users/balance',
+    url: '/user/updateBalance',
     method: 'post',
-    data: { balance },
+    data: { balance, userId },
   });
 }
-// export function changePassword(oldPassword, newPassword) {
-//   return request({
-//     url: '/users',
-//     method: 'patch',
-//     data: {
-//       password: oldPassword,
-//       repassword: newPassword,
-//     },
-//   });
-// }
-
-// export function userInfo() {
-//   return request({
-//     url: '/users',
-//     method: 'get',
-//   });
-// }
-
-// export function updateUserInfo(info) {
-//   return request({
-//     url: '/users/modified',
-//     method: 'post',
-//     data: info,
-//   });
-// }
-
-// export function wallet() {
-//   return request({
-//     url: '/users/payment',
-//     method: 'get',
-//   });
-// }
-
-// export function payment(money) {
-//   return request({
-//     url: '/users/payment',
-//     method: 'post',
-//     data: {
-//       money,
-//     },
-//   });
-// }
