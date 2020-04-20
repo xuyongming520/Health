@@ -50,8 +50,8 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               background>
-          </el-pagination>
-        </div>
+            </el-pagination>
+          </div>
         </el-card>
       </main>
     </section>

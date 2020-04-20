@@ -19,11 +19,14 @@
             <el-collapse-item
               v-for ="(item,key) of orderList"
               :key="key">
-              <template slot="title" ><div  @click="getOrderDetail(item.orderId)" style="width:100%">
-                订单号：{{item.orderId}}
-                <span style="margin-left:50px">金额：￥{{item.total}}</span>
-                <span style="margin-left:50px">下单时间：{{item.createTime}}</span>
-                <span style="margin-left:50px">订单状态：{{orderStatus[item.status].display_name }}</span>
+              <template slot="title" >
+                <div  @click="getOrderDetail(item.orderId)" style="width:100%">
+                  订单号：{{item.orderId}}
+                  <span style="margin-left:50px">金额：￥{{item.total}}</span>
+                  <span style="margin-left:50px">下单时间：{{item.createTime}}</span>
+                  <span style="margin-left:50px">
+                    订单状态：{{orderStatus[item.status].display_name }}
+                  </span>
                 </div>
               </template>
               <div
@@ -44,8 +47,19 @@
                 </el-button>
               </div>
             </el-collapse-item>
-
           </el-collapse>
+          <div class="page">
+            <el-pagination
+              layout="prev, pager, next"
+              :current-page="listQuery.page"
+              :page-size="listQuery.limit"
+              v-show="total>0"
+              :total="total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              background>
+            </el-pagination>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="我的健康" name="second">
           <el-calendar>
@@ -99,11 +113,11 @@ export default {
       orderStatus: [
         { key: 0, display_name: '未发货' },
         { key: 1, display_name: '已完成' },
-        { key: 2, display_name: '发货中' }
+        { key: 2, display_name: '发货中' },
       ],
       total: 0,
       orderList: [],
-      orderDetailList:[],
+      orderDetailList: [],
       rechargeForm: {
         balance: '',
       },
@@ -141,9 +155,9 @@ export default {
           }
         });
     },
-    getOrderDetail(orderId){
+    getOrderDetail(orderId) {
       order.orderDetailList(orderId)
-        .then((result)=>{
+        .then((result) => {
           switch (result.data.code) {
             case 0:
               this.orderDetailList = result.data.data;
@@ -154,11 +168,11 @@ export default {
             default:
               break;
           }
-        })
+        });
     },
-    updateStatus(orderId){
+    updateStatus(orderId) {
       order.updateStatus(orderId)
-        .then((result)=>{
+        .then((result) => {
           switch (result.data.code) {
             case 0:
               this.getOrderList();
@@ -169,7 +183,15 @@ export default {
             default:
               break;
           }
-        })
+        });
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val;
+      this.getOrderList();
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val;
+      this.getOrderList();
     },
     submitForm() {
       user.recharge(this.rechargeForm.balance, this.userId)
@@ -240,6 +262,10 @@ export default {
     margin: 0 auto;
     padding:20px 20px;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    .page{
+          text-align:center;
+          margin-top:20px;
+        }
   }
 }
 </style>

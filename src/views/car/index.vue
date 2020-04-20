@@ -85,16 +85,16 @@ export default {
       carList: [],
       multipleSelection: [],
       imgUrl: 'http://localhost:8080/product/images/',
-      money:0,
-      orderList:[],
+      money: 0,
+      orderList: [],
     };
   },
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      this.money=0
-      for(let i = 0 ; i < this.multipleSelection.length;i++){
-        this.money = this.money + this.multipleSelection[i].total
+      this.money = 0;
+      for (let i = 0; i < this.multipleSelection.length; i += 1) {
+        this.money = this.money + this.multipleSelection[i].total;
       }
     },
     getCarList() {
@@ -103,44 +103,43 @@ export default {
           switch (result.data.code) {
             case 0:
               this.carList = result.data.data;
-              this.money=0
+              this.money = 0;
               break;
             default:
               this.$message.error('载入失败');
               break;
           }
         });
-
     },
-    deletedCar(carId){
+    deletedCar(carId) {
       this.$confirm('是否从购物车删除该商品, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       }).then(() => {
         car.deleteCar(carId)
           .then((result) => {
-          switch (result.data.code) {
-            case 0:
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              })
-              this.getCarList();
-              break;
-            default:
-              this.$message.error('载入失败');
-              break;
-          }
-        });
-        }).catch(() => {
+            switch (result.data.code) {
+              case 0:
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!',
+                });
+                this.getCarList();
+                break;
+              default:
+                this.$message.error('载入失败');
+                break;
+            }
+          });
+      }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
-        })
-      })
+          message: '已取消删除',
+        });
+      });
     },
-    addOrder(){
+    addOrder() {
       const data = new Date();
       const month = data.getMonth() < 9 ? `0${data.getMonth() + 1}` : data.getMonth() + 1;
       const date = data.getDate() <= 9 ? `0${data.getDate()}` : data.getDate();
@@ -148,18 +147,25 @@ export default {
       const minutes = data.getMinutes();
       const seconds = data.getSeconds();
       this.value = `${month}${date}${hour}${minutes}${seconds}`;
-      var orderList = [];
-      for(let i =0;i<this.multipleSelection.length;i++){
-        orderList.push({orderId:this.value,proId:this.multipleSelection[i].proId,userId:this.userId,
-        number:this.multipleSelection[i].number,total:this.multipleSelection[i].total,status:0})
+      const orderList = [];
+      for (let i = 0; i < this.multipleSelection.length; i += 1) {
+        orderList.push({
+          orderId: this.value,
+          proId: this.multipleSelection[i].proId,
+          userId: this.userId,
+          number: this.multipleSelection[i].number,
+          total: this.money,
+          status: 0,
+        });
       }
-      console.log(orderList)
       order.addOrderByCar(orderList)
-        .then((result)=>{
-          console.log(result)
+        .then((result) => {
           switch (result.data.code) {
             case 0:
               this.$router.push({ name: 'mine' });
+              for (let i = 0; i < this.multipleSelection.length; i += 1) {
+                car.deleteCar(this.multipleSelection[i].id);
+              }
               break;
             case 1:
               this.$router.push({ name: 'mine' });
@@ -169,8 +175,8 @@ export default {
               this.$message.error('下单失败');
               break;
           }
-        })
-    }
+        });
+    },
   },
   created() {
     this.getCarList();

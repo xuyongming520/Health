@@ -26,9 +26,8 @@ export function addOrderByCar(orders) {
   return request({
     url: '/orders/addOrdersByCar',
     method: 'post',
-    data: {
-      orders,
-    },
+    dataType: 'json',
+    data: orders,
   });
 }
 
