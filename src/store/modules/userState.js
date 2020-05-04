@@ -26,6 +26,7 @@ const login = {
                 auth.setPhone(res.data.data.phone);
                 commit('SET_PHONE', true);
                 auth.setUserId(res.data.data.id);
+                commit('SET_USERID', res.data.data.id);
                 resolve('0');
                 break;
               case 1:

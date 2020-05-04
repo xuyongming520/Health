@@ -65,7 +65,6 @@ export default {
         callback();
       }
     };
-
     return {
       registerForm: {
         phone: '',
@@ -77,10 +76,13 @@ export default {
       rules: {
         phone: [
           {
-            pattern: /^[1][3,4,5,7,8,9][0-9]{9}$/, required: true, message: '输入的电话有误', trigger: 'blur',
+            pattern: /^[1][3,4,5,7,8,9][0-9]{9}$/,
+            required: true,
+            message: '输入的电话有误',
+            trigger: 'blur',
           },
         ],
-        passw1: [
+        password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
         ],
         checkPass: [

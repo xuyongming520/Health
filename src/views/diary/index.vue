@@ -24,36 +24,39 @@
             type="primary"
             icon="el-icon-plus"
             size="mini"
-            @click="dialogVisible = true">
+            @click="dialogVisibleB = true;getFoodList()">
           </el-button>
           <el-dialog
             title="食物列表"
-            :visible.sync="dialogVisible"
-            width="80%"
-            :before-close="handleClose">
+            :visible.sync="dialogVisibleB"
+            width="60%"
+            :before-close="handleClose"
+            lock-scroll="false">
             <el-input placeholder="关键字搜索"
-              v-model="input"
+              v-model="foodname"
               style="width:450px;">
-              <el-button slot="append" icon="el-icon-search" @click="handletoSearch"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="getFoodList(foodname)"></el-button>
             </el-input>
             <el-table
-              :data="tableData"
-              style="width: 100%">
+              :data="foodList"
+              style="width: 98%">
               <el-table-column
                 prop="name"
                 label="食物名称"
                 >
+                <template slot-scope="scope">{{ scope.row.name }}</template>
               </el-table-column>
               <el-table-column
                 prop="name"
                 label="卡路里"
                 width="180">
+                <template slot-scope="scope">{{ scope.row.calorie }}</template>
               </el-table-column>
               <el-table-column
                 prop="num"
                 label="数量"
                 width="180">
-                <el-input-number v-model="num" @change="handleChange" :min="1"></el-input-number>
+                <el-input-number v-model="num" @change="handleChange" :min="1" size="mini"></el-input-number>
               </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
@@ -78,7 +81,47 @@
       <div class="content">
         <div class="title">
           <span>运动</span>
-          <el-button type="primary" icon="el-icon-plus" size="mini"></el-button>
+          <el-button
+          type="primary" icon="el-icon-plus"
+          size="mini"  @click="dialogVisibleE = true;getExerciseList()"></el-button>
+          <el-dialog
+            title="运动列表"
+            :visible.sync="dialogVisibleE"
+            width="60%"
+            :before-close="handleClose"
+            lock-scroll="false">
+            <el-input placeholder="关键字搜索"
+              v-model="exercisename"
+              style="width:450px;">
+              <el-button slot="append" icon="el-icon-search" @click="getExerciseList(exercisename)"></el-button>
+            </el-input>
+            <el-table
+              :data="exerciseList"
+              style="width: 98%">
+              <el-table-column
+                prop="name"
+                label="食物名称"
+                >
+                <template slot-scope="scope">{{ scope.row.name }}</template>
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="卡路里"
+                width="180">
+                <template slot-scope="scope">{{ scope.row.calorie }}</template>
+              </el-table-column>
+              <el-table-column
+                prop="num"
+                label="数量"
+                width="180">
+                <el-input-number v-model="num" @change="handleChange" :min="1" size="mini"></el-input-number>
+              </el-table-column>
+            </el-table>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible = false">提交</el-button>
+            </span>
+          </el-dialog>
         </div>
       </div>
     </main>
@@ -86,20 +129,23 @@
 </template>
 
 <script>
-// import DoughnutChart from './components/DoughnutChart.vue';
 import echarts from 'echarts';
+import * as food from '@/api/food';
+import * as exercise from '@/api/exercise';
 
 export default {
   name: 'diary',
   data() {
     return {
-      dialogVisible: false,
+      dialogVisibleB: false,
+      dialogVisibleE: false,
       num: 1,
       charts: '',
+      foodList: [],
+      exerciseList: [],
+      foodname: '',
+      exercisename: '',
     };
-  },
-  components: {
-    // DoughnutChart,
   },
   methods: {
     initChart() {
@@ -139,6 +185,30 @@ export default {
           },
         ],
       });
+    },
+    getFoodList() {
+      food.foodList(this.foodname)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.foodList = result.data.data;
+              break;
+            default:
+              break;
+          }
+        });
+    },
+    getExerciseList() {
+      exercise.exerciseList(this.exercisename)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.exerciseList = result.data.data;
+              break;
+            default:
+              break;
+          }
+        });
     },
   },
   mounted() {

@@ -44,9 +44,11 @@ export default {
       },
       rules: {
         phone: [
-          { required: true, message: '请输入账号', trigger: 'blur' },
+          {
+            required: true, message: '请输入账号', trigger: 'blur',
+          },
         ],
-        passw1: [
+        password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
         ],
       },
@@ -59,10 +61,10 @@ export default {
       if (this.$store.getters.phone) {
         this.$router.push({ name: 'homepage' });
         this.$message.success('登陆成功');
+        this.$store.dispatch('getPhone', this.loginForm);
       } else {
         this.$message.error('账号密码错误');
       }
-      this.$store.dispatch('getPhone', this.loginForm);
     },
     register() {
       this.$router.push({ name: 'register' });

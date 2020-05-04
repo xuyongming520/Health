@@ -145,20 +145,26 @@ export default {
         });
     },
     buyToCar() {
-      const total = this.num * this.detail.price;
-      car.addCar(this.detail.id, this.userId, this.num, total)
-        .then((result) => {
-          switch (result.data.code) {
-            case 0:
-              this.$router.push({ name: 'car' });
-              break;
-            case 1:
-              this.$message.error('下单失败');
-              break;
-            default:
-              break;
-          }
-        });
+      console.log(this.phone, this.userId);
+      if (this.phone) {
+        const total = this.num * this.detail.price;
+        car.addCar(this.detail.id, this.userId, this.num, total)
+          .then((result) => {
+            switch (result.data.code) {
+              case 0:
+                this.$router.push({ name: 'car' });
+                break;
+              case 1:
+                this.$message.error('下单失败');
+                break;
+              default:
+                break;
+            }
+          });
+      } else {
+        this.$message.error('请先登陆');
+        this.$router.push({ name: 'login' });
+      }
     },
   },
   created() {
