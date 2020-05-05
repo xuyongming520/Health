@@ -13,10 +13,10 @@
             <template>
               <el-dialog
                 title="当日身体情况"
-                :visible.sync="dialogVisible"
+                :visible.sync="dialogVisibleA"
                 width="25%"
                 :lock-scroll="false"
-                v-if="day === value">
+                >
                 <el-form
                   :model="healthForm"
                   status-icon
@@ -49,34 +49,70 @@
                     <el-input v-model="healthForm.defecation" placeholder="请输入排便次数"></el-input>
                   </el-form-item>
                   <el-form-item >
-                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button @click="dialogVisibleA = false">取 消</el-button>
                     <el-button
-                      @click="subHealth(),dialogVisible = false"
+                      @click="subHealth(),dialogVisibleA = false"
                       type="primary"
                       style="margin-top:15px;margin-left:70px">提交</el-button>
                   </el-form-item>
                 </el-form>
               </el-dialog>
               <el-dialog
-                title="当日身体情况"
-                :visible.sync="dialogVisible"
+                title="当日身体状态"
+                :visible.sync="dialogVisibleB"
                 width="25%"
-                :lock-scroll="false"
-                v-if="day !== value">
+                :lock-scroll="false">
                 <el-row>
-                  <el-col :span="6">身高：{}<div class="grid-content bg-purple"></div></el-col>
-                  <el-col :span="18"><div class="grid-content bg-purple-light"></div></el-col>
+                  <el-col :span="12"><div class="grid-content">
+                    身高：{{health.height}}</div></el-col>
+                  <el-col :span="12"><div class="grid-content">
+                    体重：{{health.weight}}</div></el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12"><div class="grid-content">
+                    胸围：{{health.chest}}</div></el-col>
+                  <el-col :span="12"><div class="grid-content">
+                    腰围：{{health.waistline}}</div></el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12"><div class="grid-content">
+                    臀围：{{health.hipline}}</div></el-col>
+                  <el-col :span="12"><div class="grid-content">
+                    摄入量：{{health.water}}</div></el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12"><div class="grid-content">睡眠时间：{{health.sleep}}</div></el-col>
+                  <el-col :span="12"><div class="grid-content">
+                    排便次数：{{health.defecation}}</div></el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24"><div class="grid-content">
+                    BMI指数：{{health.bmi}}
+                  </div></el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24"><div class="grid-content">
+                    体脂率：{{health.fatRate}}
+                  </div></el-col>
                 </el-row>
               </el-dialog>
             </template>
     </main>
     <footer>
       <header>
-        身体状况：
+        <div style="padding-right:20px">
+          <strong>今日指标：</strong>
+          BMI：{{bmi}}</div>
+        <div>体脂率：{{fatRate}}</div>
       </header>
       <div class="proList">
-        <div style="margin:20px">BMI：{{bmi}}</div>
-        <div style="margin:20px">体脂率：{{fatRate}}</div>
+        <div class="content" v-show="bmi === '无'">
+          亲，还未填写今日健康档案哦~
+        </div>
+        <div class="advise" v-show="bmi">
+          <p>{{status}}</p>
+          <p>{{fatStatus}}</p>
+        </div>
       </div>
     </footer>
   </div>
@@ -90,8 +126,10 @@ export default {
   name: 'files',
   data() {
     return {
-      activeName: 'first',
-      dialogVisible: false,
+      status: '',
+      fatStatus: '',
+      dialogVisibleA: false,
+      dialogVisibleB: false,
       healthForm: {
         userId: '',
         createTime: '',
@@ -103,8 +141,8 @@ export default {
         water: '',
         sleep: '',
         defecation: '',
-        bmi:'无',
-        fatRate:'无',
+        bmi: '无',
+        fatRate: '无',
       },
       rules: {
         height: [
@@ -114,60 +152,95 @@ export default {
           { required: true, message: '请输入体重', trigger: 'blur' },
         ],
       },
-      health:[],
-      bmi:'无',
-      fatRate:'无',
-      value:'',
+      health: [],
+      bmi: '无',
+      fatRate: '无',
+      value: '',
     };
   },
   methods: {
     subHealth() {
       health.submitHealth(this.healthForm)
-        .then((result)=>{
-          console.log(result)
+        .then((result) => {
           switch (result.data.code) {
-              case 0:
-                this.health=result.data.data
-                this.bmi = result.data.data.bmi;
-                this.fatRate = result.data.data.fatRate;
-                break;
-              case 1:
-                this.$message.error('提交失败');
-                break;
-              default:
-                break;
+            case 0:
+              this.health = result.data.data;
+              this.bmi = result.data.data.bmi;
+              this.fatRate = result.data.data.fatRate;
+              if (this.bmi < 18.5) {
+                this.status = '您的身材属于：轻体重';
+              } else if (this.bmi <= 24) {
+                this.status = '您的身材属于：健康体重';
+              } else if (this.bmi <= 28) {
+                this.status = '您的身材属于：超体重';
+              } else {
+                this.status = '您的身材属于：肥胖';
+              }
+              if (this.fatRate < 0.08) {
+                this.fatStatus = '哇哦！您的身材堪比健美运动员~';
+              } else if (this.bmi <= 0.14) {
+                this.fatStatus = '低头看，您可以看到您的腹肌唷';
+              } else if (this.bmi <= 0.19) {
+                this.fatStatus = '您需要注意咯，控制自己的饮食，开始运动！你是最棒的';
+              } else if (this.bmi <= 0.24) {
+                this.fatStatus = '摸摸自己圆滚滚的小肚腩，还不赶快行动起来';
+              } else if (this.bmi <= 0.39) {
+                this.fatStatus = '别灰心，坚持不懈的努力，提升自己，会拥抱美好的';
+              } else {
+                this.fatStatus = '只要坚持下去，铁杵磨成针';
+              }
+              break;
+            case 1:
+              this.$message.error('提交失败');
+              break;
+            default:
+              break;
           }
-        })
+        });
     },
     choiceDate(day) {
-      this.dialogVisible = true;
       this.healthForm.createTime = day;
-      if(day === this.value){
-        console.log(value)
-      }
-      else{
-        health.getHealth(this.userId,day)
-          .then((result)=>{
-          console.log(result)
-          switch (result.data.code) {
-              case null:
-                this.bmi = result.data.data.bmi;
-                this.fatRate = result.data.data.fatRate;
+      if (day === this.value) {
+        health.getHealth(this.userId, day)
+          .then((result) => {
+            switch (result.data.code) {
+              case 0:
+                this.health = result.data.data;
+                this.dialogVisibleB = true;
                 break;
               case 1:
-                this.$message.error('提交失败');
+                this.dialogVisibleA = true;
                 break;
               default:
+                this.$message.error('信息失败');
                 break;
-          }
-        })
+            }
+          });
+      } else if (day > this.value) {
+        this.$message.warning('未来可期！');
+      } else {
+        health.getHealth(this.userId, day)
+          .then((result) => {
+            switch (result.data.code) {
+              case 0:
+                this.health = result.data.data;
+                this.dialogVisibleB = true;
+                break;
+              case 1:
+                this.$message.warning('当日未提交健康信息');
+                break;
+              default:
+                this.$message.error('登陆成功');
+                break;
+            }
+          });
       }
     },
   },
   created() {
     this.healthForm.userId = this.userId.toString();
     const data = new Date();
-    const year = "20" + (data.getYear() - 100);
+    const year = `20${data.getYear() - 100}`;
     const month = data.getMonth() < 9 ? `0${data.getMonth() + 1}` : data.getMonth() + 1;
     const date = data.getDate() <= 9 ? `0${data.getDate()}` : data.getDate();
     this.value = `${year}-${month}-${date}`;
@@ -200,9 +273,13 @@ export default {
     .el-col {
       border-radius: 4px;
     }
+    .grid-content {
+      border-radius: 4px;
+      min-height: 36px;
+    }
   }
   footer{
-    height: 15em;
+    height: 13em;
     width: $detailWidth;
     background-color: white;
     margin: 20px auto;
@@ -210,12 +287,23 @@ export default {
     header{
       padding:18px 20px;
       border-bottom: 1px solid #ebeef5;
-    }
-    .proList{
       display: flex;
-      flex-direction:column;
       justify-content: flex-start;
     }
+    .proList{
+      width: 100%;
+      height: 80%;
+      display: table;
+      .content{
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+      }
+      .advise{
+        margin: 20px;
+      }
+    }
+
   }
 }
 </style>

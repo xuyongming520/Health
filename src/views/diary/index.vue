@@ -3,17 +3,17 @@
     <header>
       <div class="left">
         <span>摄入</span>
-        <h1>0</h1>
+        <h1>{{intake}}</h1>
       </div>
       <div class="middle">
-          <div :class="className"
+          <div
           :style="{height:'160px',width:'200px',margin:'0 auto'}"
           ref="lineCard" />
           <p>推荐预算均衡</p>
       </div>
       <div class="right">
         <span>运动</span>
-        <h1>0</h1>
+        <h1>{{motion}}</h1>
       </div>
     </header>
     <main>
@@ -30,12 +30,13 @@
             title="食物列表"
             :visible.sync="dialogVisibleB"
             width="60%"
-            :before-close="handleClose"
-            lock-scroll="false">
+            :lock-scroll="false">
             <el-input placeholder="关键字搜索"
               v-model="foodname"
               style="width:450px;">
-              <el-button slot="append" icon="el-icon-search" @click="getFoodList(foodname)"></el-button>
+              <el-button slot="append"
+              icon="el-icon-search"
+              @click="getFoodList(foodname)"></el-button>
             </el-input>
             <el-table
               :data="foodList"
@@ -56,7 +57,8 @@
                 prop="num"
                 label="数量"
                 width="180">
-                <el-input-number v-model="num" @change="handleChange" :min="1" size="mini"></el-input-number>
+                <el-input-number v-model="num"
+                :min="1" size="mini"></el-input-number>
               </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
@@ -65,17 +67,176 @@
             </span>
           </el-dialog>
         </div>
+        <div class="list">
+          <template>
+              <el-table
+                :data="bList"
+                style="width: 100%">
+                <el-table-column
+                  prop="name"
+                  label="名称"
+                  width="100">
+                  <template slot-scope="scope">{{ scope.row.name }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="calorie"
+                  label="卡路里(千卡/100克)">
+                  <template slot-scope="scope">{{ scope.row.calorie }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="num"
+                  label="数量">
+                  <template slot-scope="scope">{{ scope.row.num }}</template>
+                </el-table-column>
+              </el-table>
+            </template>
+        </div>
       </div>
       <div class="content">
         <div class="title">
           <span>午餐</span>
-          <el-button type="primary" icon="el-icon-plus" size="mini"></el-button>
+          <el-button
+          type="primary"
+            icon="el-icon-plus"
+            size="mini"
+            @click="dialogVisibleB = true;getFoodList()"></el-button>
+          <el-dialog
+            title="食物列表"
+            :visible.sync="dialogVisibleB"
+            width="60%"
+            :lock-scroll="false">
+            <el-input placeholder="关键字搜索"
+              v-model="foodname"
+              style="width:450px;">
+              <el-button slot="append"
+              icon="el-icon-search"
+              @click="getFoodList(foodname)"></el-button>
+            </el-input>
+            <el-table
+              :data="foodList"
+              style="width: 98%">
+              <el-table-column
+                prop="name"
+                label="食物名称"
+                >
+                <template slot-scope="scope">{{ scope.row.name }}</template>
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="卡路里"
+                width="180">
+                <template slot-scope="scope">{{ scope.row.calorie }}</template>
+              </el-table-column>
+              <el-table-column
+                prop="num"
+                label="数量"
+                width="180">
+                <el-input-number v-model="num"
+                :min="1" size="mini"></el-input-number>
+              </el-table-column>
+            </el-table>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible = false">提交</el-button>
+            </span>
+          </el-dialog>
+        </div>
+        <div class="list">
+          <template>
+              <el-table
+                :data="lList"
+                style="width: 100%">
+                <el-table-column
+                  prop="name"
+                  label="名称"
+                  width="100">
+                  <template slot-scope="scope">{{ scope.row.name }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="calorie"
+                  label="卡路里(千卡/100克)">
+                  <template slot-scope="scope">{{ scope.row.calorie }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="num"
+                  label="数量">
+                  <template slot-scope="scope">{{ scope.row.num }}</template>
+                </el-table-column>
+              </el-table>
+            </template>
         </div>
       </div>
       <div class="content">
         <div class="title">
           <span>晚餐</span>
-          <el-button type="primary" icon="el-icon-plus" size="mini"></el-button>
+          <el-button type="primary"
+            icon="el-icon-plus"
+            size="mini"
+            @click="dialogVisibleB = true;getFoodList()"></el-button>
+            <el-dialog
+            title="食物列表"
+            :visible.sync="dialogVisibleB"
+            width="60%"
+            :lock-scroll="false">
+            <el-input placeholder="关键字搜索"
+              v-model="foodname"
+              style="width:450px;">
+              <el-button slot="append"
+              icon="el-icon-search"
+              @click="getFoodList(foodname)"></el-button>
+            </el-input>
+            <el-table
+              :data="foodList"
+              style="width: 98%">
+              <el-table-column
+                prop="name"
+                label="食物名称"
+                >
+                <template slot-scope="scope">{{ scope.row.name }}</template>
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="卡路里"
+                width="180">
+                <template slot-scope="scope">{{ scope.row.calorie }}</template>
+              </el-table-column>
+              <el-table-column
+                prop="num"
+                label="数量"
+                width="180">
+                <el-input-number v-model="num"
+                :min="1" size="mini"></el-input-number>
+              </el-table-column>
+            </el-table>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible = false">提交</el-button>
+            </span>
+          </el-dialog>
+        </div>
+        <div class="list">
+          <template>
+              <el-table
+                :data="dList"
+                style="width: 100%">
+                <el-table-column
+                  prop="name"
+                  label="名称"
+                  width="100">
+                  <template slot-scope="scope">{{ scope.row.name }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="calorie"
+                  label="卡路里(千卡/100克)">
+                  <template slot-scope="scope">{{ scope.row.calorie }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="num"
+                  label="数量">
+                  <template slot-scope="scope">{{ scope.row.num }}</template>
+                </el-table-column>
+              </el-table>
+            </template>
         </div>
       </div>
       <div class="content">
@@ -88,12 +249,13 @@
             title="运动列表"
             :visible.sync="dialogVisibleE"
             width="60%"
-            :before-close="handleClose"
-            lock-scroll="false">
+            :lock-scroll="false">
             <el-input placeholder="关键字搜索"
               v-model="exercisename"
               style="width:450px;">
-              <el-button slot="append" icon="el-icon-search" @click="getExerciseList(exercisename)"></el-button>
+              <el-button slot="append"
+              icon="el-icon-search"
+               @click="getExerciseList(exercisename)"></el-button>
             </el-input>
             <el-table
               :data="exerciseList"
@@ -114,7 +276,9 @@
                 prop="num"
                 label="数量"
                 width="180">
-                <el-input-number v-model="num" @change="handleChange" :min="1" size="mini"></el-input-number>
+                <el-input-number v-model="num"
+                :min="1"
+                size="mini"></el-input-number>
               </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
@@ -122,6 +286,30 @@
               <el-button type="primary" @click="dialogVisible = false">提交</el-button>
             </span>
           </el-dialog>
+        </div>
+        <div class="list">
+          <template>
+              <el-table
+                :data="eList"
+                style="width: 100%">
+                <el-table-column
+                  prop="name"
+                  label="名称"
+                  width="100">
+                  <template slot-scope="scope">{{ scope.row.name }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="calorie"
+                  label="卡路里(千卡/100克)">
+                  <template slot-scope="scope">{{ scope.row.calorie }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="num"
+                  label="数量">
+                  <template slot-scope="scope">{{ scope.row.num }}</template>
+                </el-table-column>
+              </el-table>
+            </template>
         </div>
       </div>
     </main>
@@ -132,6 +320,8 @@
 import echarts from 'echarts';
 import * as food from '@/api/food';
 import * as exercise from '@/api/exercise';
+import { mapGetters } from 'vuex';
+import * as diary from '@/api/diary';
 
 export default {
   name: 'diary',
@@ -145,6 +335,14 @@ export default {
       exerciseList: [],
       foodname: '',
       exercisename: '',
+      value: '',
+      type: '',
+      bList: [],
+      lList: [],
+      dList: [],
+      eList: [],
+      intake: 0,
+      motion: 0,
     };
   },
   methods: {
@@ -179,12 +377,84 @@ export default {
               show: false,
             },
             data: [
-              { value: 90 },
-              { value: 10 },
+              { value: this.intake - this.motion },
+              { value: 2000 },
             ],
           },
         ],
       });
+    },
+    getBreakfastList() {
+      this.type = 'breakfast';
+      diary.actionList(this.userId, this.value, this.type)
+        .then((result) => {
+          switch (result.data.code) {
+            case null:
+              this.bList = result.data.data.foods;
+              for (let i = 0; i < this.bList.length; i += 1) {
+                const count = this.bList[i].num * this.bList[i].calorie;
+                this.intake += count;
+              }
+              break;
+            default:
+              this.$message.error('异常');
+              break;
+          }
+        });
+    },
+    getLunchList() {
+      this.type = 'lunch';
+      diary.actionList(this.userId, this.value, this.type)
+        .then((result) => {
+          switch (result.data.code) {
+            case null:
+              this.lList = result.data.data.foods;
+              for (let i = 0; i < this.lList.length; i += 1) {
+                const count = this.lList[i].num * this.lList[i].calorie;
+                this.intake += count;
+              }
+              break;
+            default:
+              this.$message.error('异常');
+              break;
+          }
+        });
+    },
+    getDinnerList() {
+      this.type = 'dinner';
+      diary.actionList(this.userId, this.value, this.type)
+        .then((result) => {
+          switch (result.data.code) {
+            case null:
+              this.dList = result.data.data.foods;
+              for (let i = 0; i < this.dList.length; i += 1) {
+                const count = this.dList[i].num * this.dList[i].calorie;
+                this.intake += count;
+              }
+              break;
+            default:
+              this.$message.error('异常');
+              break;
+          }
+        });
+    },
+    getEList() {
+      this.type = 'exercise';
+      diary.actionList(this.userId, this.value, this.type)
+        .then((result) => {
+          switch (result.data.code) {
+            case null:
+              this.eList = result.data.data.foods;
+              for (let i = 0; i < this.eList.length; i += 1) {
+                const count = this.eList[i].num * this.eList[i].calorie;
+                this.motion += count;
+              }
+              break;
+            default:
+              this.$message.error('异常');
+              break;
+          }
+        });
     },
     getFoodList() {
       food.foodList(this.foodname)
@@ -204,17 +474,35 @@ export default {
           switch (result.data.code) {
             case 0:
               this.exerciseList = result.data.data;
+              this.calculation();
               break;
             default:
               break;
           }
         });
     },
+    calculation() {
+    },
   },
   mounted() {
+    this.getBreakfastList();
+    this.getLunchList();
+    this.getDinnerList();
+    this.getEList();
     this.initChart();
   },
   created() {
+    const data = new Date();
+    const year = `20${data.getYear() - 100}`;
+    const month = data.getMonth() < 9 ? `0${data.getMonth() + 1}` : data.getMonth() + 1;
+    const date = data.getDate() <= 9 ? `0${data.getDate()}` : data.getDate();
+    this.value = `${year}-${month}-${date}`;
+  },
+  computed: {
+    ...mapGetters([
+      'userId',
+      'phone',
+    ]),
   },
 };
 </script>
@@ -257,7 +545,7 @@ export default {
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     .content{
       flex:1 1;
-      padding: 40px;
+      padding: 20px;
       .title{
         display: flex;
         justify-content: space-between;
