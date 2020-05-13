@@ -5,7 +5,11 @@
         <img src="@/assets/user.png">
       </div>
       <div class="content">
-        <h3 style="font-size:24px">{{userInfo.name}}</h3>
+        <h3 style="font-size:24px">{{userInfo.name}}
+          <span class="font" style="margin-left:20px">
+            年龄：{{userInfo.age}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            性别：{{sexStatus[userInfo.sex].sex_name}}</span>
+        </h3>
         <span class="font">手机号码：{{userInfo.phone}}</span>
         <span class="font">邮箱：{{userInfo.email}}</span>
         <span class="font">地址：{{userInfo.address}}</span>
@@ -25,7 +29,7 @@
                   <span style="margin-left:50px">金额：￥{{item.total}}</span>
                   <span style="margin-left:50px">下单时间：{{item.createTime}}</span>
                   <span style="margin-left:50px">
-                    订单状态：{{orderStatus[item.status].display_name }}
+                    订单状态：{{orderStatus[item.status].display_name}}
                   </span>
                 </div>
               </template>
@@ -33,9 +37,37 @@
               v-for ="(itemDetail,key) of orderDetailList"
               :key="key">
                 <template>
-                <img :src="`http://localhost:8080/product/images/`+itemDetail.proPic" style="width:180px;height:180px">
-                <span style="margin-left:50px;top:0px">商品名：{{itemDetail.proName}}</span>
-                <span style="margin-left:50px">商品单价：￥{{itemDetail.proPrice}}</span>
+                  <img :src="`http://localhost:8080/product/images/`+itemDetail.proPic" style="width:180px;height:180px">
+                  <span style="margin-left:50px;top:0px">商品名：{{itemDetail.proName}}</span>
+                  <span style="margin-left:50px">商品单价：￥{{itemDetail.proPrice}}</span>
+                  <span style="margin-left:50px">评价内容：{{itemDetail.evaluate}}</span>
+                  <el-button type="danger"
+                    style="float:right;height:30px;padding:0px 20px;margin:10px 10px"
+                    plain v-show="item.status === 1 "
+                    @click="returnOrder(item.orderId)">
+                    退货
+                  </el-button>
+                  <el-button type="info"
+                    style="float:right;height:30px;padding:0px 20px;margin:10px 10px"
+                    plain v-show="item.status === 1 || item.status === 3"
+                    @click="dialogVisible = true">
+                    评价
+                  </el-button>
+                  <el-dialog
+                    title="评价"
+                    :visible.sync="dialogVisible"
+                    width="30%"
+                    append-to-body>
+                    <el-form :model="form">
+                        <el-form-item label="商品评价" label-width="120px">
+                          <el-input v-model="form.content" autocomplete="off"></el-input>
+                        </el-form-item>
+                      </el-form>
+                      <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="dialogFormVisible = false;evaluate(form.content,item.orderId,item.proId)">确 定</el-button>
+                      </div>
+                  </el-dialog>
                 </template>
               </div>
               <div style="width:100%">
@@ -44,7 +76,7 @@
                   plain v-show="item.status === 2 "
                   @click="updateStatus(item.orderId)">
                   收货
-                </el-button>
+              </el-button>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -60,18 +92,6 @@
               background>
             </el-pagination>
           </div>
-        </el-tab-pane>
-        <el-tab-pane label="我的健康" name="second">
-          <el-calendar>
-  <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
-            <template
-              slot="dateCell"
-              slot-scope="{date, data}">
-              <p :class="data.isSelected ? 'is-selected' : ''">
-                {{ data.day.split('-').slice(1).join('-') }} {{ data.isSelected ? '✔️' : ''}}
-              </p>
-            </template>
-          </el-calendar>
         </el-tab-pane>
         <el-tab-pane label="余额充值" name="third" style="margin-top:50px">
           <el-form :model="rechargeForm"
@@ -104,6 +124,7 @@ export default {
   data() {
     return {
       activeName: 'first',
+      dialogVisible: false,
       userInfo: [],
       listQuery: {
         limit: 10,
@@ -114,6 +135,11 @@ export default {
         { key: 0, display_name: '未发货' },
         { key: 1, display_name: '已完成' },
         { key: 2, display_name: '发货中' },
+        { key: 3, display_name: '已退货' },
+      ],
+      sexStatus:[
+        { key: 0, sex_name: '女生' },
+        { key: 1, sex_name: '男生' },
       ],
       total: 0,
       orderList: [],
@@ -121,6 +147,9 @@ export default {
       rechargeForm: {
         balance: '',
       },
+      form:{
+        content:''
+      }
     };
   },
   methods: {
@@ -211,6 +240,36 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+    returnOrder(orderId){
+      order.returnGoods(orderId)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.getOrderList();
+              break;
+            case 1:
+              this.$message.error('评价失败');
+              break;
+            default:
+              break;
+          }
+        });
+    },
+    evaluate(content,orderId,proId){
+      order.evaluateGoods(orderId,proId,this.userId,content)
+        .then((result)=>{
+          switch (result.data.code) {
+            case 0:
+              this.getOrderList();
+              break;
+            case 1:
+              this.$message.error('评价失败');
+              break;
+            default:
+              break;
+          }
+        })
+    }
   },
   created() {
     this.listQuery.userId = this.userId;

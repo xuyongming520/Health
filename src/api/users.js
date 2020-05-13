@@ -2,7 +2,7 @@
 import request from '@/utils/request';
 
 export function register({
-  phone, password, name, email,
+  phone, password, name, email, address, age, sex,
 }) {
   return request({
     url: '/user/register',
@@ -12,6 +12,9 @@ export function register({
       password,
       name,
       email,
+      address,
+      age,
+      sex,
     },
   });
 }

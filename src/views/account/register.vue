@@ -3,7 +3,6 @@
     <main>
       <el-card class="register">
         <header>
-          <svg-icon icon-class="book" class-name="icon" class="registerIcon"/>
           <div class="logo" >注册</div>
         </header>
         <section>
@@ -34,8 +33,20 @@
             <el-form-item label="姓名" prop="name" style="width:400px">
               <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
             </el-form-item>
+            <el-form-item label="性别">
+              <el-radio-group v-model="registerForm.sex">
+                <el-radio  label="1">男生</el-radio>
+                <el-radio  label="0">女生</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="年龄" prop="age" style="width:400px">
+              <el-input v-model="registerForm.age" placeholder="请输入年龄"></el-input>
+            </el-form-item>
             <el-form-item label="邮箱" prop="email" style="width:400px">
               <el-input v-model="registerForm.email" placeholder="请输入邮箱"></el-input>
+            </el-form-item>
+            <el-form-item label="地址" prop="address" style="width:400px">
+              <el-input v-model="registerForm.address" placeholder="请输入地址"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -71,8 +82,13 @@ export default {
         password: '',
         checkPass: '',
         name: '',
+        sex:'',
+        age:'',
         email: '',
+        address:''
       },
+      man:1,
+      woman:0,
       rules: {
         phone: [
           {
@@ -92,6 +108,12 @@ export default {
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
         ],
+        sex: [
+          { required: true, message: '请选择性别', trigger: 'blur' },
+        ],
+        age: [
+          { required: true, message: '请输入年龄', trigger: 'blur' },
+        ],
         email: [
           {
             // eslint-disable-next-line no-useless-escape
@@ -106,6 +128,7 @@ export default {
   },
   methods: {
     register() {
+      console.log(this.registerForm)
       user.register(this.registerForm)
         .then((result) => {
           switch (result.data.code) {
@@ -141,11 +164,11 @@ export default {
     align-items: center;
     .register{
       width: 500px;
-      height: 550px;
+      height: 650px;
       border-radius: 5px 5px 5px 5px;
       margin-top:30px;
       header{
-        height:30%;
+
         display:flex;
         flex-direction: column;
         justify-content: flex-end;

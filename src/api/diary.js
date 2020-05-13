@@ -7,3 +7,13 @@ export function actionList(id, date, type) {
     data: { id, date, type },
   });
 }
+
+export function submitFood(id, date, type, foods) {
+  return request({
+    url: '/health/diet',
+    method: 'post',
+    data: {
+      id, date, type, foods,
+    },
+  });
+}

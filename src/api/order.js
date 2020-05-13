@@ -48,3 +48,23 @@ export function updateStatus(orderId) {
     },
   });
 }
+
+export function returnGoods(orderId) {
+  return request({
+    url: '/orders/return',
+    method: 'post',
+    data: {
+      orderId,
+    },
+  });
+}
+
+export function evaluateGoods(orderId, proId, userId, evaluate) {
+  return request({
+    url: '/orders/evaluate',
+    method: 'post',
+    data: {
+      orderId, proId, userId, evaluate,
+    },
+  });
+}

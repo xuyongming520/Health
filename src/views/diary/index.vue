@@ -24,13 +24,13 @@
             type="primary"
             icon="el-icon-plus"
             size="mini"
+            v-show="!bList"
             @click="dialogVisibleB = true;getFoodList()">
           </el-button>
           <el-dialog
             title="食物列表"
             :visible.sync="dialogVisibleB"
-            width="60%"
-            :lock-scroll="false">
+            width="60%">
             <el-input placeholder="关键字搜索"
               v-model="foodname"
               style="width:450px;">
@@ -40,7 +40,13 @@
             </el-input>
             <el-table
               :data="foodList"
-              style="width: 98%">
+              ref="multipleTable"
+              style="width: 98%"
+              @selection-change="handleSelectionChange">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
               <el-table-column
                 prop="name"
                 label="食物名称"
@@ -57,13 +63,16 @@
                 prop="num"
                 label="数量"
                 width="180">
-                <el-input-number v-model="num"
-                :min="1" size="mini"></el-input-number>
+                <template slot-scope="scope">
+                <el-input-number v-model="scope.row.num"
+                :min="0"
+                size="mini"></el-input-number></template>
               </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible = false">提交</el-button>
+              <el-button @click="dialogVisibleB = false">取 消</el-button>
+              <el-button type="primary"
+              @click="dialogVisibleB = false;submit('breakfast')">提交</el-button>
             </span>
           </el-dialog>
         </div>
@@ -99,10 +108,11 @@
           type="primary"
             icon="el-icon-plus"
             size="mini"
-            @click="dialogVisibleB = true;getFoodList()"></el-button>
+            v-show="!lList"
+            @click="dialogVisibleL = true;getFoodList()"></el-button>
           <el-dialog
             title="食物列表"
-            :visible.sync="dialogVisibleB"
+            :visible.sync="dialogVisibleL"
             width="60%"
             :lock-scroll="false">
             <el-input placeholder="关键字搜索"
@@ -114,7 +124,13 @@
             </el-input>
             <el-table
               :data="foodList"
-              style="width: 98%">
+              ref="multipleTable"
+              style="width: 98%"
+              @selection-change="handleSelectionChange">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
               <el-table-column
                 prop="name"
                 label="食物名称"
@@ -131,13 +147,16 @@
                 prop="num"
                 label="数量"
                 width="180">
-                <el-input-number v-model="num"
-                :min="1" size="mini"></el-input-number>
+                <template slot-scope="scope">
+                <el-input-number v-model="scope.row.num"
+                :min="0"
+                size="mini"></el-input-number></template>
               </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible = false">提交</el-button>
+              <el-button @click="dialogVisibleL = false">取 消</el-button>
+              <el-button type="primary"
+              @click="dialogVisibleL = false;;submit('lunch')">提交</el-button>
             </span>
           </el-dialog>
         </div>
@@ -172,10 +191,11 @@
           <el-button type="primary"
             icon="el-icon-plus"
             size="mini"
-            @click="dialogVisibleB = true;getFoodList()"></el-button>
+            v-show="!dList"
+            @click="dialogVisibleD = true;getFoodList()"></el-button>
             <el-dialog
             title="食物列表"
-            :visible.sync="dialogVisibleB"
+            :visible.sync="dialogVisibleD"
             width="60%"
             :lock-scroll="false">
             <el-input placeholder="关键字搜索"
@@ -187,7 +207,13 @@
             </el-input>
             <el-table
               :data="foodList"
-              style="width: 98%">
+              ref="multipleTable"
+              style="width: 98%"
+              @selection-change="handleSelectionChange">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
               <el-table-column
                 prop="name"
                 label="食物名称"
@@ -204,13 +230,16 @@
                 prop="num"
                 label="数量"
                 width="180">
-                <el-input-number v-model="num"
-                :min="1" size="mini"></el-input-number>
+                <template slot-scope="scope">
+                <el-input-number v-model="scope.row.num"
+                :min="0"
+                size="mini"></el-input-number></template>
               </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible = false">提交</el-button>
+              <el-button @click="dialogVisibleD = false">取 消</el-button>
+              <el-button type="primary"
+              @click="dialogVisibleD = false;submit('dinner')">提交</el-button>
             </span>
           </el-dialog>
         </div>
@@ -244,7 +273,8 @@
           <span>运动</span>
           <el-button
           type="primary" icon="el-icon-plus"
-          size="mini"  @click="dialogVisibleE = true;getExerciseList()"></el-button>
+          size="mini"  v-show="!eList"
+          @click="dialogVisibleE = true;getExerciseList()"></el-button>
           <el-dialog
             title="运动列表"
             :visible.sync="dialogVisibleE"
@@ -259,7 +289,13 @@
             </el-input>
             <el-table
               :data="exerciseList"
-              style="width: 98%">
+              ref="multipleTable"
+              style="width: 98%"
+              @selection-change="handleSelectionChange">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
               <el-table-column
                 prop="name"
                 label="食物名称"
@@ -276,14 +312,16 @@
                 prop="num"
                 label="数量"
                 width="180">
-                <el-input-number v-model="num"
-                :min="1"
-                size="mini"></el-input-number>
+                <template slot-scope="scope">
+                <el-input-number v-model="scope.row.num"
+                :min="0"
+                size="mini"></el-input-number></template>
               </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible = false">提交</el-button>
+              <el-button @click="dialogVisibleE = false">取 消</el-button>
+              <el-button type="primary"
+              @click="dialogVisibleE = false;submit('exercise')">提交</el-button>
             </span>
           </el-dialog>
         </div>
@@ -329,7 +367,8 @@ export default {
     return {
       dialogVisibleB: false,
       dialogVisibleE: false,
-      num: 1,
+      dialogVisibleD: false,
+      dialogVisibleL: false,
       charts: '',
       foodList: [],
       exerciseList: [],
@@ -343,6 +382,7 @@ export default {
       eList: [],
       intake: 0,
       motion: 0,
+      multipleSelection: [],
     };
   },
   methods: {
@@ -378,7 +418,7 @@ export default {
             },
             data: [
               { value: this.intake - this.motion },
-              { value: 2000 },
+              { value: 1500 },
             ],
           },
         ],
@@ -389,15 +429,16 @@ export default {
       diary.actionList(this.userId, this.value, this.type)
         .then((result) => {
           switch (result.data.code) {
-            case null:
+            case 0:
               this.bList = result.data.data.foods;
               for (let i = 0; i < this.bList.length; i += 1) {
                 const count = this.bList[i].num * this.bList[i].calorie;
                 this.intake += count;
               }
+              this.initChart();
               break;
             default:
-              this.$message.error('异常');
+              this.$message.error('今日还无早餐数据');
               break;
           }
         });
@@ -407,15 +448,16 @@ export default {
       diary.actionList(this.userId, this.value, this.type)
         .then((result) => {
           switch (result.data.code) {
-            case null:
+            case 0:
               this.lList = result.data.data.foods;
               for (let i = 0; i < this.lList.length; i += 1) {
                 const count = this.lList[i].num * this.lList[i].calorie;
                 this.intake += count;
               }
+              this.initChart();
               break;
             default:
-              this.$message.error('异常');
+              this.$message.error('今日还无午餐数据');
               break;
           }
         });
@@ -425,15 +467,16 @@ export default {
       diary.actionList(this.userId, this.value, this.type)
         .then((result) => {
           switch (result.data.code) {
-            case null:
+            case 0:
               this.dList = result.data.data.foods;
               for (let i = 0; i < this.dList.length; i += 1) {
                 const count = this.dList[i].num * this.dList[i].calorie;
                 this.intake += count;
               }
+              this.initChart();
               break;
             default:
-              this.$message.error('异常');
+              this.$message.error('今日还无晚餐数据');
               break;
           }
         });
@@ -443,15 +486,16 @@ export default {
       diary.actionList(this.userId, this.value, this.type)
         .then((result) => {
           switch (result.data.code) {
-            case null:
+            case 0:
               this.eList = result.data.data.foods;
               for (let i = 0; i < this.eList.length; i += 1) {
                 const count = this.eList[i].num * this.eList[i].calorie;
                 this.motion += count;
               }
+              this.initChart();
               break;
             default:
-              this.$message.error('异常');
+              this.$message.error('今日还无体育数据');
               break;
           }
         });
@@ -481,7 +525,26 @@ export default {
           }
         });
     },
-    calculation() {
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    submit(type) {
+      console.log(this.multipleSelection);
+      diary.submitFood(this.userId, this.value, type, this.multipleSelection)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.$message.success('添加成功');
+              this.getBreakfastList();
+              this.getLunchList();
+              this.getDinnerList();
+              this.getExerciseList();
+              break;
+            default:
+              this.$message.error('添加失败');
+              break;
+          }
+        });
     },
   },
   mounted() {
