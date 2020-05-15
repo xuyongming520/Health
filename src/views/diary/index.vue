@@ -24,7 +24,7 @@
             type="primary"
             icon="el-icon-plus"
             size="mini"
-            v-show="!bList"
+            v-show="bList === null"
             @click="dialogVisibleB = true;getFoodList()">
           </el-button>
           <el-dialog
@@ -108,7 +108,7 @@
           type="primary"
             icon="el-icon-plus"
             size="mini"
-            v-show="!lList"
+            v-show="lList === null"
             @click="dialogVisibleL = true;getFoodList()"></el-button>
           <el-dialog
             title="食物列表"
@@ -191,7 +191,7 @@
           <el-button type="primary"
             icon="el-icon-plus"
             size="mini"
-            v-show="!dList"
+            v-show="dList=== null"
             @click="dialogVisibleD = true;getFoodList()"></el-button>
             <el-dialog
             title="食物列表"
@@ -273,7 +273,7 @@
           <span>运动</span>
           <el-button
           type="primary" icon="el-icon-plus"
-          size="mini"  v-show="!eList"
+          size="mini"  v-show="eList=== null"
           @click="dialogVisibleE = true;getExerciseList()"></el-button>
           <el-dialog
             title="运动列表"
@@ -376,10 +376,10 @@ export default {
       exercisename: '',
       value: '',
       type: '',
-      bList: [],
-      lList: [],
-      dList: [],
-      eList: [],
+      bList: null,
+      lList: null,
+      dList: null,
+      eList: null,
       intake: 0,
       motion: 0,
       multipleSelection: [],

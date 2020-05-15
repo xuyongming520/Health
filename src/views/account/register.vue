@@ -82,13 +82,13 @@ export default {
         password: '',
         checkPass: '',
         name: '',
-        sex:'',
-        age:'',
+        sex: '',
+        age: '',
         email: '',
-        address:''
+        address: '',
       },
-      man:1,
-      woman:0,
+      man: 1,
+      woman: 0,
       rules: {
         phone: [
           {
@@ -128,7 +128,7 @@ export default {
   },
   methods: {
     register() {
-      console.log(this.registerForm)
+      console.log(this.registerForm);
       user.register(this.registerForm)
         .then((result) => {
           switch (result.data.code) {
