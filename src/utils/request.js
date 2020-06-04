@@ -12,18 +12,6 @@ const service = axios.create({
   timeout: 5000, // 请求超时设置
 });
 
-// 封装请求拦截
-// service.interceptors.request.use(
-//   (config) => {
-//     // config.headers['Content-Type'] = 'application/json;charset=UTF-8';
-//     if (getToken()) {
-//       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-//       config.headers['X-Token'] = getToken();
-//     }
-//     return config;
-//   },
-//   error => Promise.reject(error),
-// );
 
 // 封装响应拦截，判断token是否过期
 service.interceptors.response.use(

@@ -31,6 +31,12 @@
                   <span style="margin-left:50px">
                     订单状态：{{orderStatus[item.status].display_name}}
                   </span>
+                                    <el-button type="danger"
+                    style="float:right;height:30px;padding:0px 20px;margin:10px 10px"
+                    plain v-show="item.status === 1 "
+                    @click="returnOrder(item.orderId)">
+                    退货
+                  </el-button>
                 </div>
               </template>
               <div
@@ -41,12 +47,7 @@
                   <span style="margin-left:50px;top:0px">商品名：{{itemDetail.proName}}</span>
                   <span style="margin-left:50px">商品单价：￥{{itemDetail.proPrice}}</span>
                   <span style="margin-left:50px">评价内容：{{itemDetail.evaluate}}</span>
-                  <el-button type="danger"
-                    style="float:right;height:30px;padding:0px 20px;margin:10px 10px"
-                    plain v-show="item.status === 1 "
-                    @click="returnOrder(item.orderId)">
-                    退货
-                  </el-button>
+
                   <el-button type="info"
                     style="float:right;height:30px;padding:0px 20px;margin:10px 10px"
                     plain v-show="item.status === 1 || item.status === 3"
@@ -64,8 +65,9 @@
                         </el-form-item>
                       </el-form>
                       <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="dialogFormVisible = false;evaluate(form.content,item.orderId,item.proId)">确 定</el-button>
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="dialogVisible = false;
+                        evaluate(form.content,item.orderId,item.proId)">确 定</el-button>
                       </div>
                   </el-dialog>
                 </template>
@@ -137,7 +139,7 @@ export default {
         { key: 2, display_name: '发货中' },
         { key: 3, display_name: '已退货' },
       ],
-      sexStatus:[
+      sexStatus: [
         { key: 0, sex_name: '女生' },
         { key: 1, sex_name: '男生' },
       ],
@@ -147,9 +149,9 @@ export default {
       rechargeForm: {
         balance: '',
       },
-      form:{
-        content:''
-      }
+      form: {
+        content: '',
+      },
     };
   },
   methods: {
@@ -240,8 +242,23 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    returnOrder(orderId){
+    returnOrder(orderId) {
       order.returnGoods(orderId)
+        .then((result) => {
+          switch (result.data.code) {
+            case 0:
+              this.getOrderList();
+              break;
+            case 1:
+              this.$message.error('退货失败');
+              break;
+            default:
+              break;
+          }
+        });
+    },
+    evaluate(content, orderId, proId) {
+      order.evaluateGoods(orderId, proId, this.userId, content)
         .then((result) => {
           switch (result.data.code) {
             case 0:
@@ -255,21 +272,6 @@ export default {
           }
         });
     },
-    evaluate(content,orderId,proId){
-      order.evaluateGoods(orderId,proId,this.userId,content)
-        .then((result)=>{
-          switch (result.data.code) {
-            case 0:
-              this.getOrderList();
-              break;
-            case 1:
-              this.$message.error('评价失败');
-              break;
-            default:
-              break;
-          }
-        })
-    }
   },
   created() {
     this.listQuery.userId = this.userId;
